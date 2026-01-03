@@ -33,6 +33,7 @@ public class User {
     private String providerId;
 
     // 사용자 닉네임
+    @Column(nullable = false, length = 100)
     private String nickname;
 
     // 가입일
