@@ -19,7 +19,7 @@ function AppLayout(props) {
                         <Box component={Link} to="/main" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#fff' }}>
                             {/* 홈페이지 로고 or 아이콘 */}
                             <Typography variant='h6' component="h1" sx={{ fontWeight: 700 }}>
-                                ForP
+                                ポーピー
                             </Typography>
                         </Box>
                         {/* 우측 버튼 영역 */}
