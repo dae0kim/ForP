@@ -36,6 +36,10 @@ public class User {
     @Column(nullable = false, length = 100)
     private String nickname;
 
+    // 사용자 프로필 이미지 URL
+    @Column(name = "profile_image", length = 512)
+    private String profileImage;
+
     // 가입일
     @CreationTimestamp
     @Column(name = "rgst_date", nullable = false, updatable = false)
