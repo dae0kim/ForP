@@ -1,0 +1,237 @@
+/* 화면 전체 배경 느낌 */
+.boardPage {
+    min-height: calc(100vh - 70px);
+    background: #eef7ff;
+    padding: 28px 18px 40px;
+}
+
+/* 가운데 정렬 컨테이너 */
+.boardWrap {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+/* 검색줄: 가운데 검색 + 우측 버튼 */
+.searchRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 8px 0 22px;
+}
+
+/* 캡처처럼 둥근 검색바 */
+.searchPill {
+    width: min(520px, 70vw);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #cfeaff;
+    border-radius: 999px;
+    padding: 12px 14px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    padding-left: 6px;
+    color: #1f2a37;
+}
+
+.searchIcon {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.85;
+}
+
+/* 내 글 보기 버튼 */
+.myPostBtn {
+    border: 1px solid #dbeafe;
+    background: #ffffff;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+}
+
+.myPostBtn:hover {
+    background: #f8fbff;
+}
+
+/* 테이블 카드 */
+.tableCard {
+    background: #eef7ff;
+    border: 1px solid #cfe6ff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* 캡처 느낌: 라인 중심 */
+.postTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.postTable tbody tr {
+    background: transparent;
+}
+
+.postRow {
+    cursor: pointer;
+    border-top: 1px solid #d7e9fb;
+}
+
+.postRow:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.postTable td {
+    padding: 10px 10px;
+    color: #1f2a37;
+    vertical-align: middle;
+}
+
+.colNo {
+    width: 60px;
+    text-align: center;
+    color: #334155;
+}
+
+.colTitle {
+    width: auto;
+}
+
+.titleText {
+    display: inline-block;
+    max-width: 520px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.colAuthor {
+    width: 120px;
+    text-align: center;
+    color: #334155;
+}
+
+.colDate {
+    width: 110px;
+    text-align: center;
+    color: #334155;
+}
+
+.colViews {
+    width: 90px;
+    text-align: center;
+    color: #334155;
+}
+
+.emptyRow {
+    padding: 22px !important;
+    text-align: center;
+    color: #64748b;
+}
+
+/* 글 작성 버튼 위치(오른쪽 아래) */
+.writeRow {
+    display: flex;
+    justify-content: flex-end;
+    margin: 14px 0 24px;
+}
+
+.writeBtn {
+    background: #bfe3ff;
+    border: 1px solid #a8d7ff;
+    color: #1f2a37;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.writeBtn:hover {
+    background: #aedbff;
+}
+
+/* 페이지네이션 */
+.pager {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: #334155;
+    font-size: 13px;
+}
+
+.pagerBtn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #64748b;
+}
+
+.pagerBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pagerNums {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.numBtn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    color: #1f2a37;
+}
+
+.numBtn.active {
+    background: #9fd1f6;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.dots {
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+/* 접근성: thead 숨김 */
+.srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+@media (max-width: 640px) {
+
+    .colAuthor,
+    .colDate,
+    .colViews {
+        display: none;
+    }
+
+    .titleText {
+        max-width: 70vw;
+    }
+}

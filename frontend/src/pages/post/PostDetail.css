@@ -1,0 +1,302 @@
+.pdPage {
+    padding: 6px 0 40px;
+}
+
+.pdBoardTitle {
+    margin: 6px 0 18px;
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.pdCard {
+    background: #fff;
+    border-radius: 26px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+    padding: 26px 32px;
+}
+
+.pdTitleRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.pdTitle {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.2px;
+}
+
+.pdPostActions {
+    display: flex;
+    gap: 12px;
+    padding-top: 2px;
+}
+
+.pdLine {
+    height: 2px;
+    background: rgba(0, 0, 0, 0.12);
+    margin-top: 10px;
+}
+
+.pdMetaRow {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pdAvatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    background: #d9d9d9;
+}
+
+.pdAvatar.sm {
+    width: 34px;
+    height: 34px;
+}
+
+.pdMetaText {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    color: #333;
+}
+
+.pdAuthor {
+    font-weight: 900;
+}
+
+.pdMeta {
+    font-size: 13px;
+    color: #555;
+}
+
+.pdMetaDot {
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: #777;
+    opacity: 0.6;
+}
+
+.pdEdited {
+    font-size: 13px;
+    color: #777;
+}
+
+.pdContent {
+    margin-top: 18px;
+    color: #222;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.pdImageWrap {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+}
+
+.pdImage {
+    max-width: 100%;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.pdDivider {
+    margin: 22px 0;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.pdSectionTitle {
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.pdCommentForm {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.pdCommentInput {
+    flex: 1;
+    height: 36px;
+    border: 1px solid #cfe8ff;
+    border-radius: 4px;
+    padding: 0 10px;
+    outline: none;
+    background: #fff;
+}
+
+/* 수정 입력줄 */
+.pdEditRow {
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 수정 input */
+.pdEditInput {
+    flex: 1;
+    min-width: 0;
+    height: 34px;
+    /* ✅ 기준 높이 */
+    padding: 0 10px;
+    border: 1px solid #cfe8ff;
+    border-radius: 6px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* input 옆 버튼 래퍼 */
+.pdEditActions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    align-items: center;
+}
+
+/* ✅ 저장/취소 버튼이 input 높이랑 딱 맞게 */
+.pdEditActions .pdMiniBtn {
+    height: 34px;
+    /* ✅ input과 동일 */
+    padding: 0 14px;
+    /* 좌우만 */
+    line-height: 34px;
+    /* ✅ 텍스트 수직 정렬 */
+    display: inline-flex;
+    /* ✅ 가운데 정렬 */
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* danger 버튼도 동일 높이 유지 (선택) */
+.pdEditActions .pdMiniBtn.danger {
+    height: 34px;
+    line-height: 34px;
+}
+
+
+.pdCommentBtn {
+    width: 64px;
+    height: 32px;
+    border: none;
+    border-radius: 7px;
+    background: #a8d9ff;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.pdError {
+    color: #b00020;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.pdComments {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pdEmpty {
+    color: #666;
+    font-size: 14px;
+    padding: 8px 0;
+}
+
+.pdCommentItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.pdCommentBody {
+    flex: 1;
+}
+
+.pdCommentHead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.pdCommentInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pdCommentActions {
+    display: flex;
+    gap: 10px;
+}
+
+.pdCommentText {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #222;
+    white-space: pre-wrap;
+}
+
+.pdEditRow {
+    margin-top: 6px;
+}
+
+.pdEditInput {
+    width: 100%;
+    height: 34px;
+    border: 1px solid #cfe8ff;
+    border-radius: 6px;
+    padding: 0 10px;
+    outline: none;
+}
+
+.pdLinkBtn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+    opacity: 0.8;
+}
+
+.pdLinkBtn:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.pdLinkBtn.danger {
+    color: #b00020;
+}
+
+.pdMiniBtn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+    opacity: 0.8;
+}
+
+.pdMiniBtn:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.pdMiniBtn.danger {
+    color: #b00020;
+}
