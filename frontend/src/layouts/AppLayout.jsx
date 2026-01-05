@@ -1,25 +1,22 @@
 import { Box, Container, Stack, Button, AppBar, Toolbar, Typography } from '@mui/material';
-import { Link, Outlet } from 'react-router';
+import { Link, Outlet } from 'react-router-dom';
 
-// 헤더 + 메뉴 + 메인화면 연결
-function AppLayout(props) {
-
-    // 로그아웃 이벤트 핸들러
+function AppLayout() {
     const handleLogout = () => {
         localStorage.clear();
-        window.location.href = "/";
+        window.location.href = "/"; // ok
     }
 
     return (
         <Box>
-            {/* 상단 헤더 */}
             <AppBar position='fixed'>
-                <Container maxWidth="xl" sx={{px:10}}>
-                    <Toolbar sx={{ 
+                <Container maxWidth="xl" sx={{ px: 10 }}>
+                    <Toolbar sx={{
                         minHeight: 80,
                         display: 'flex',
                         justifyContent: 'space-between',
-                        p:2, }}>
+                        p: 2,
+                    }}>
                         <Box component={Link} to="/main" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#fff' }}>
                             {/* 홈페이지 로고 or 아이콘 */}
                             <Typography variant='h4' sx={{ fontWeight: 700 }}>
@@ -27,10 +24,10 @@ function AppLayout(props) {
                             </Typography>
                         </Box>
                         {/* 우측 버튼 영역 */}
-                        <Stack 
-                        direction="row" 
-                        alignItems="center" 
-                        spacing={1}>
+                        <Stack
+                            direction="row"
+                            alignItems="center"
+                            spacing={1}>
                             <Button component={Link} to="/posts" variant='text' sx={{ color: '#fff' }} >게시판</Button>
                             <Button component={Link} to="/events" variant='text' sx={{ color: '#fff' }} >이벤트</Button>
                             <Button component={Link} to="/map" variant='text' sx={{ color: '#fff' }} >지도</Button>
