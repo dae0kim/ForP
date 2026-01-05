@@ -14,16 +14,23 @@ function AppLayout(props) {
         <Box>
             {/* 상단 헤더 */}
             <AppBar position='fixed'>
-                <Container maxWidth='md'>
-                    <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Container maxWidth="xl" sx={{px:10}}>
+                    <Toolbar sx={{ 
+                        minHeight: 80,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        p:2, }}>
                         <Box component={Link} to="/main" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#fff' }}>
                             {/* 홈페이지 로고 or 아이콘 */}
-                            <Typography variant='h6' component="h1" sx={{ fontWeight: 700 }}>
+                            <Typography variant='h4' sx={{ fontWeight: 700 }}>
                                 ポーピー
                             </Typography>
                         </Box>
                         {/* 우측 버튼 영역 */}
-                        <Stack direction="row" alignItems="center">
+                        <Stack 
+                        direction="row" 
+                        alignItems="center" 
+                        spacing={1}>
                             <Button component={Link} to="/posts" variant='text' sx={{ color: '#fff' }} >게시판</Button>
                             <Button component={Link} to="/events" variant='text' sx={{ color: '#fff' }} >이벤트</Button>
                             <Button component={Link} to="/map" variant='text' sx={{ color: '#fff' }} >지도</Button>
@@ -35,7 +42,7 @@ function AppLayout(props) {
             </AppBar>
 
             {/* 하단 화면 */}
-            <Container component="main" maxWidth='md' sx={{ pt: 10, mb: 4 }}>
+            <Container component="main" maxWidth='md' sx={{ pt: 12, mb: 4 }}>
                 <Outlet />
             </Container>
         </Box>
