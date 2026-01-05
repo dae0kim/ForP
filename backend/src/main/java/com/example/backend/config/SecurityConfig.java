@@ -3,6 +3,7 @@ package com.example.backend.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,7 +34,24 @@ public class SecurityConfig {
                                 "/api/files/**",
                                 "/images/**"
                         ).permitAll()
+                        // 게시글
+                        .requestMatchers(HttpMethod.GET, "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/posts/**").authenticated() // 로그인한 사람만 접근할 수 있게끔
+                        .requestMatchers(HttpMethod.PUT, "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/posts/**").authenticated()
+
+                        // 댓글
+                        .requestMatchers(HttpMethod.GET, "/api/posts/*/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/posts/*/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/posts/*/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/posts/*/comments/**").authenticated()
+
+                        // 이미지
+                        .requestMatchers("/images/**").authenticated()
+
                         .anyRequest().authenticated()
+
+
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider),
                         org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);

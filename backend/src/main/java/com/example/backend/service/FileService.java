@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,6 +24,7 @@ public class FileService {
     private static final long MAX_SIZE = 5 * 1024 * 1024; // 5MB
     private static final Set<String> ALLOWED_EXT = Set.of("jpg", "jpeg", "png");
 
+    // 저장
     /*
     이미지 저장 후, 프론트에서 접근할 url 반환
     ex) /images/uuid.jpg
@@ -59,6 +59,7 @@ public class FileService {
         }
     }
 
+    // 삭제 이 부분 어떻게 코딩?
     public void deleteImage(String imageUrl) {
         if (imageUrl == null || imageUrl.isBlank()) return;
         if (!imageUrl.startsWith("/images")) return;
@@ -112,3 +113,4 @@ public class FileService {
         return filename.substring(idx + 1).toLowerCase();
     }
 }
+
