@@ -16,6 +16,7 @@ public class KakaoUserResponse {
     @Getter
     public static class Profile {
         private String nickname;
+        private String profile_image_url;   // 카카오 JSON 키값과 일치하도록
     }
 
 }

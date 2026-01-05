@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.config.JwtProvider;
 import com.example.backend.domain.User;
+import com.example.backend.dto.response.UserResponse;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.KakaoAuthService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> me(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<UserResponse> me(@RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.substring(7); // Bearer 제거
         Long userId = jwtProvider.getUserId(token);
@@ -34,7 +35,15 @@ public class AuthController {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return ResponseEntity.ok(user);
+        // Entity -> DTO 변환
+        UserResponse response = UserResponse.builder()
+                .id(user.getId())
+                .nickname(user.getNickname())
+                .profileImage(user.getProfileImage())
+                .provider(user.getProvider())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
 }

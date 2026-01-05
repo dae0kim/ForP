@@ -43,6 +43,11 @@ public class KakaoAuthService {
                                                         .getProfile()
                                                         .getNickname()
                                         )
+                                        .profileImage(
+                                                kakaoUser.getKakao_account()
+                                                        .getProfile()
+                                                        .getProfile_image_url()
+                                        )
                                         .build()
                         )
                 );
