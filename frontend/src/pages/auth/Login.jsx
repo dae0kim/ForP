@@ -1,4 +1,5 @@
-import React from 'react';
+import { Box, Button } from '@mui/material';
+import kakaoButtonImg from '../../assets/images/kakao_login_large_narrow.png'
 
 function Login() {
     const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
@@ -15,10 +16,23 @@ function Login() {
     };
 
     return (
-        <div>
-            <h1>로그인</h1>
-            <button onClick={kakaoLogin}>카카오 로그인</button>
-        </div>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <Button
+                onClick={kakaoLogin}
+                sx={{
+                    padding: 0,
+                    minWidth: 'auto',
+                    overflow: 'hidden',
+                    borderRadius: '6px',
+                    '&:hover': {
+                        backgroundColor: 'transparent',
+                        opacity: 0.9
+                    }
+                }}
+            >
+                <img src={kakaoButtonImg} alt="카카오 로그인" style={{ display: 'block', width: '100%' }} />
+            </Button>
+        </Box>
     );
 }
 
