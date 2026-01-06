@@ -6,9 +6,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.List;
+
 // 게시글 작성 요청 DTO
 @Getter
-@Setter // DTO 만들고 있으면 Setter도 들어가야함
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -20,17 +22,20 @@ public class PostCreateRequest {
 
     @NotBlank(message = "내용 필수")
     private String content;
-    private String imageUrl; // 이것도 시험에서는 필요없음
 
-    // 요청 DTO -> Post entity로 변환
+    // 본문의 모든 이미지 URL 받도록
+    private List<String> imageUrls;
+
     public Post toEntity(User user) {
+        // 리스트 중 첫 번째 이미지를 대표 이미지(목록용)로 설정
+        String firstImageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls.get(0) : null;
+
         return Post.builder()
-                .user(user) // 작성자
+                .user(user)
                 .title(title)
                 .content(content)
-                .imageUrl(imageUrl)
+                .imageUrl(firstImageUrl) // 대표 이미지 저장
                 .build();
-        // 회원 수정이 들어가게 되면 이 안의 내용들도 수정 들어감
     }
 }
 

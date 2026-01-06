@@ -32,6 +32,10 @@ public class SecurityConfig {
                                 "/api/files/**",
                                 "/images/**"
                         ).permitAll()
+
+                        // 게시글 작성 중 이미지를 서버에 임시 저장(quill 에디터 관련)
+                        .requestMatchers(HttpMethod.POST, "/api/images/**").authenticated()
+
                         // 게시글
                         .requestMatchers(HttpMethod.GET, "/api/posts/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/posts/**").authenticated() // 로그인한 사람만 접근할 수 있게끔

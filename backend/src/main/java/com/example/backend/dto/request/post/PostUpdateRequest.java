@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.List;
+
 // 게시글 수정 요청 DTO
 @Getter
 @Setter
@@ -18,8 +20,8 @@ public class PostUpdateRequest {
 
     @NotBlank(message = "내용 필수")
     private String content;
-    private String imageUrl;
 
+    // 수정 시에도 현재 본문에 남아있는 이미지 URL 리스트를 받음
+    private List<String> imageUrls;
 
 }
-
