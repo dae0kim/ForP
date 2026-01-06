@@ -1,11 +1,8 @@
 import React from 'react';
+import EventTable from '../../components/event/EventTable';
 
 function EventList(props) {
-    return (
-        <div>
-            event page
-        </div>
-    );
+    return <EventTable />;
 }
 
 export default EventList;
