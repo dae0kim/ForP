@@ -1,25 +1,22 @@
 import { Box, Container, Stack, Button, AppBar, Toolbar, Typography } from '@mui/material';
 import { Link, NavLink, Outlet } from 'react-router';
 
-// 헤더 + 메뉴 + 메인화면 연결
-function AppLayout(props) {
-
-    // 로그아웃 이벤트 핸들러
+function AppLayout() {
     const handleLogout = () => {
         localStorage.clear();
-        window.location.href = "/";
+        window.location.href = "/"; // ok
     }
 
     return (
         <Box>
-            {/* 상단 헤더 */}
             <AppBar position='fixed'>
-                <Container maxWidth="xl" sx={{px:10}}>
-                    <Toolbar sx={{ 
+                <Container maxWidth="xl" sx={{ px: 10 }}>
+                    <Toolbar sx={{
                         minHeight: 80,
                         display: 'flex',
                         justifyContent: 'space-between',
-                        p:2, }}>
+                        p: 2,
+                    }}>
                         <Box component={Link} to="/main" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#fff' }}>
                             {/* 홈페이지 로고 or 아이콘 */}
                             <Typography variant='h4' sx={{ fontWeight: 700 }}>

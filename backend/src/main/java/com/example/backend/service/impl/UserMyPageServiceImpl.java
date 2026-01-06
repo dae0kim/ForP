@@ -24,4 +24,16 @@ public class UserMyPageServiceImpl implements UserMyPageService {
 
         return UserMyPageResponse.from(user);
     }
+
+    // 닉네임 수정
+    @Override
+    public UserMyPageResponse updateNickname(Long userId, String nickname) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+
+        user.updateNickname(nickname);
+
+        // dirty checking으로 DB 반영
+        return UserMyPageResponse.from(user);
+    }
 }

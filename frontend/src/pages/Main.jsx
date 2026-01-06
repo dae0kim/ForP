@@ -11,31 +11,31 @@ function Main(props) {
             id: 1,
             title: "반려동물 콘테스트에 나가는 사람",
             content: "지금 우리 강아지 나가려고 준비 중인데 그냥 갑자기 자랑하고 싶었음. 엄청 길게 써서 이게 말줄임이 적용이 되는지 확인을 해봐야 함 또 뭘 써야 하는 걸까 난 잘 모르겠지만 잠이 온다 하하하하 갈까 안자고 해야 할 거 같은데 ㅎㅎㅎ",
-            image:"/images/event1.png",
+            image: "/images/event1.png",
             // 아래 3개는 useState로 관리 예정
             commentCnt: 10,
-            viewCnt:10,
-            date:"2024.11.03"
+            viewCnt: 10,
+            date: "2024.11.03"
         },
         {
             id: 2,
             title: "반려동물 콘테스트에 나가는 사람",
             content: "지금 우리 강아지 나가려고 준비 중인데 그냥 갑자기 자랑하고 싶었음. 엄청 길게 써서 이게 말줄임이 적용이 되는지 확인을 해봐야 함 또 뭘 써야 하는 걸까 난 잘 모르겠지만 잠이 온다 하하하하 갈까 안자고 해야 할 거 같은데 ㅎㅎㅎ",
-            image:"/images/event1.png",
+            image: "/images/event1.png",
             // 아래 3개는 useState로 관리 예정
             commentCnt: 10,
-            viewCnt:10,
-            date:"2025.11.03"
+            viewCnt: 10,
+            date: "2025.11.03"
         },
         {
             id: 3,
             title: "반려동물 콘테스트에 나가는 사람",
             content: "지금 우리 강아지 나가려고 준비 중인데 그냥 갑자기 자랑하고 싶었음. 엄청 길게 써서 이게 말줄임이 적용이 되는지 확인을 해봐야 함 또 뭘 써야 하는 걸까 난 잘 모르겠지만 잠이 온다 하하하하 갈까 안자고 해야 할 거 같은데 ㅎㅎㅎ",
-            image:"/images/event1.png",
+            image: "/images/event1.png",
             // 아래 3개는 useState로 관리 예정
             commentCnt: 10,
-            viewCnt:10,
-            date:"2025.11.03"
+            viewCnt: 10,
+            date: "2025.11.03"
         }
     ]
 
@@ -178,20 +178,20 @@ function Main(props) {
                         borderRadius:'100%',
                         objectFit:'cover',
 
-                    }}/>
-                    <Typography fontWeight={500} sx={{fontSize:'22px'}}>{user.nickname}</Typography>
-                    </Stack>)}
-                    </Card>
-                </Stack>
-                {/* 내 반려동물 영역 
+                                            }} />
+                                        <Typography fontWeight={500} sx={{ fontSize: '22px' }}>{user.nickname}</Typography>
+                                    </Stack>)}
+                            </Card>
+                        </Stack>
+                        {/* 내 반려동물 영역 
                 반려동물 페이지 만들어지면 url 연결 해서 완성할 예정
                 */}
-                <Stack spacing={2} sx={{ p:3 }}>
-                    <Typography variant="h6" component='h1'fontWeight={600} sx={{mb:2, fontSize: '32px'}}>내 반려동물</Typography>
-                </Stack>
-            </Box>
-        </Box>
-        </Stack>
+                        <Stack spacing={2} sx={{ p: 3 }}>
+                            <Typography variant="h6" component='h1' fontWeight={600} sx={{ mb: 2, fontSize: '32px' }}>내 반려동물</Typography>
+                        </Stack>
+                    </Box>
+                </Box>
+            </Stack>
         </>
     );
 }
