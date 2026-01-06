@@ -2,19 +2,19 @@ import api from "./api";
 
 // 목록
 export async function fetchPosts({ page, size, keyword, mine }) {
-    const res = await api.get("/posts", { params: { page, size, keyword, mine } });
+    const res = await api.get("/api/posts", { params: { page, size, keyword, mine } });
     return res.data;
 }
 
 // 상세
 export async function fetchPostDetail(postId) {
-    const res = await api.get(`/posts/${postId}`);
+    const res = await api.get(`/api/posts/${postId}`);
     return res.data;
 }
 
 // 작성
 export async function createPost({ title, content, imageUrls }) {
-    const res = await api.post("/posts", { title, content, imageUrls });
+    const res = await api.post("/api/posts", { title, content, imageUrls });
     return res.data;
 }
 
@@ -23,7 +23,7 @@ export async function uploadImage(file) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await api.post("/images/upload", formData, {
+    const res = await api.post("/api/images/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
     });
 
@@ -32,12 +32,12 @@ export async function uploadImage(file) {
 
 // 수정
 export async function updatePost(postId, body) {
-    const res = await api.put(`/posts/${postId}`, body);
+    const res = await api.put(`/api/posts/${postId}`, body);
     return res.data;
 }
 
 // 삭제
 export async function deletePost(postId) {
-    const res = await api.delete(`/posts/${postId}`);
+    const res = await api.delete(`/api/posts/${postId}`);
     return res.data;
 }
