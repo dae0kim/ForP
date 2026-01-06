@@ -1,4 +1,4 @@
-import { Box, Card, Typography, Stack, Link, CardMedia, CardContent } from '@mui/material';
+import { Box, Card, Typography, Stack, Link, CardMedia, CardContent, Grid } from '@mui/material';
 import React from 'react';
 import { eventList } from '../../data/events';
 
@@ -8,16 +8,16 @@ function EventTable(props) {
     return (
         <Box sx={{ flex:1 }}>
             {/* ------------------------ 이벤트 ------------------------- */}
-            <Box>
                 <Typography variant="h6" component='h1' fontWeight={600} 
                     sx={{ mb:2, fontSize: '32px'}}>이벤트</Typography>
                 {/* Event cards */}
-                <Stack 
+                <Grid 
                     direction='row' // 가로 배치
                     spacing={2}
                     sx={{
-                        overflowX: 'auto', // 가로 스크롤 활성화
-                        pb:1 // padding-bottom
+                        display:"grid",
+                        gridTemplateColumns:"repeat(3,1fr)", // 최대 3개
+                        gap:3,
                     }}
                 >
                     {eventList.map((event) => (
@@ -45,8 +45,7 @@ function EventTable(props) {
                             </CardContent> 
                         </Card>
                     ))}
-                </Stack>
-            </Box>
+            </Grid>
         </Box>
     );
 }
