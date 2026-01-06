@@ -6,6 +6,8 @@ import com.example.backend.dto.response.UserPetResponse;
 import com.example.backend.service.UserPetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +20,11 @@ public class UserPetController {
     private final UserPetService petService;
 
     private Long userId() {
-        return 1L;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || auth.getPrincipal() == null) {
+            throw new RuntimeException("Unauthorized");
+        }
+        return (Long) auth.getPrincipal();
     }
 
     // 생성

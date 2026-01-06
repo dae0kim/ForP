@@ -5,23 +5,32 @@ import KakaoRedirect from "../pages/auth/KakaoRedirect";
 import ProtectedRoute from "./ProtectedRoute";
 import AppLayout from "../layouts/AppLayout";
 import PostList from "../pages/post/PostList";
-import EventList from "../pages/event/EventList"
-import Map from "../pages/Map"
-import MyPage from "../pages/MyPage"
-import NotFoundPage from "../pages/NotFoundPage"
 import PostDetail from "../pages/post/PostDetail";
 import PostCreate from "../pages/post/PostCreate";
 import PostEdit from "../pages/post/PostEdit";
+import EventList from "../pages/event/EventList";
+import Map from "../pages/Map";
+import MyPage from "../pages/MyPage";
+import PetRegister from "../pages/PetRegister";
+import NotFoundPage from "../pages/NotFoundPage";
 
 export const router = createBrowserRouter([
     // 최초 화면은 무조건 로그인 화면으로
     {
         path: "/",
-        element: <Login />
+        element: <Login />,
     },
     {
         path: "/auth/kakao",
-        element: <KakaoRedirect />
+        element: <KakaoRedirect />,
+    },
+    {
+        path: "/pet-register",
+        element: (
+            <ProtectedRoute>
+                <PetRegister />
+            </ProtectedRoute>
+        ),
     },
     // 로그인 후 메인화면
     {
@@ -33,41 +42,41 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/main",
-                element: <Main />
+                element: <Main />,
             },
             {
                 path: "posts",
-                element: <PostList />
+                element: <PostList />,
             },
             {
                 path: "posts/new",
-                element: <PostCreate /> // 게시글 작성
+                element: <PostCreate />, // 게시글 작성
             },
             {
                 path: "posts/:postId",
-                element: <PostDetail /> // 게시글 상세 조회
+                element: <PostDetail />, // 게시글 상세 조회
             },
             {
                 path: "posts/:postId/edit", // 게시글 수정
-                element: <PostEdit />
+                element: <PostEdit />,
             },
             {
                 path: "/events",
-                element: <EventList />
+                element: <EventList />,
             },
             {
                 path: "/map",
-                element: <Map />
+                element: <Map />,
             },
             {
                 path: "/mypage",
-                element: <MyPage />
-            }
-        ]
+                element: <MyPage />,
+            },
+        ],
     },
     // 404
     {
         path: "*",
-        element: <NotFoundPage />
-    }
-])
+        element: <NotFoundPage />,
+    },
+]);
