@@ -11,6 +11,8 @@ import {
     deleteComment,
 } from "../../api/commentsApi";
 
+import "react-quill-new/dist/quill.snow.css";
+
 /*
  * - 작성자 아니면 글 수정/삭제 버튼 숨김
  * - 삭제 클릭 시 confirm("삭제 하시겠습니까?") 확인 후 삭제
@@ -292,14 +294,12 @@ export default function PostDetail() {
                 </div>
 
                 {/* 본문 */}
-                <div className="pdContent">{post.content ?? ""}</div>
-
-                {/* 첨부 사진 */}
-                {imageUrl && (
-                    <div className="pdImageWrap">
-                        <img className="pdImage" src={imageUrl} alt="첨부 이미지" />
-                    </div>
-                )}
+                <div className="pdContent ql-snow">
+                    <div
+                        className="ql-editor"
+                        dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
+                    />
+                </div>
 
                 <div className="pdDivider" />
 

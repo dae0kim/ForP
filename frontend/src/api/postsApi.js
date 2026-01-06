@@ -13,8 +13,8 @@ export async function fetchPostDetail(postId) {
 }
 
 // 작성
-export async function createPost({ title, content, imageUrl }) {
-    const res = await api.post("/posts", { title, content, imageUrl });
+export async function createPost({ title, content, imageUrls }) {
+    const res = await api.post("/posts", { title, content, imageUrls });
     return res.data;
 }
 
@@ -23,11 +23,11 @@ export async function uploadImage(file) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await api.post("/files/images", formData, {
+    const res = await api.post("/images/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
     });
 
-    return res.data?.imageUrl ?? res.data;
+    return res.data;
 }
 
 // 수정
