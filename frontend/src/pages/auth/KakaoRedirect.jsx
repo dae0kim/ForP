@@ -27,7 +27,8 @@ function KakaoRedirect() {
                 localStorage.setItem("accessToken", token);
 
                 // 내 정보 조회
-                const user = await getMe(token);
+                // const user = await getMe(token);
+                const user = await getMe();
 
                 alert(`${user.nickname}님 환영합니다`);
 
@@ -38,6 +39,8 @@ function KakaoRedirect() {
 
             } catch (err) {
                 console.error("로그인 실패", err);
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("loginUser");
                 // 다시 로그인 화면으로 이동
                 navigate("/");
             }

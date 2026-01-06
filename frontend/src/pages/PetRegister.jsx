@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import axios from "axios";
 import {
     Box,
     Button,
@@ -15,11 +14,7 @@ import {
     RadioGroup,
     FormControlLabel,
 } from "@mui/material";
-
-const api = axios.create({
-    baseURL: "http://localhost:8080",
-    withCredentials: true,
-});
+import { registerPet } from "../api/petsApi";
 
 export default function PetRegister() {
     const [form, setForm] = useState({
@@ -86,15 +81,9 @@ export default function PetRegister() {
                 weight: Number(form.weight),
             };
 
-            const fd = new FormData();
-            fd.append(
-                "data",
-                new Blob([JSON.stringify(payload)], { type: "application/json" })
-            );
-            fd.append("image", form.imageFile);
-
-            await api.post("/api/pets", fd, {
-                headers: { "Content-Type": "multipart/form-data" },
+            await registerPet({
+                payload,
+                imageFile: form.imageFile,
             });
 
             alert("등록 완료!");
@@ -103,6 +92,7 @@ export default function PetRegister() {
             alert(e?.response?.data?.message ?? "등록 실패");
         }
     };
+
 
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "#EEF6FF", py: 6 }}>
