@@ -12,7 +12,8 @@ import {
     TextField,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import api from "../api/api";
+import { getMyPageMe, updateNickname } from "../api/mypageApi";
+
 // import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 function MyPage() {
@@ -35,8 +36,7 @@ function MyPage() {
     useEffect(() => {
         const loadMe = async () => {
             try {
-                const res = await api.get("/mypage/me");
-                const me = res.data;
+                const me = await getMyPageMe();
 
                 setUser((prev) => ({
                     ...prev,
@@ -82,24 +82,22 @@ function MyPage() {
         if (!isNicknameValid) return;
 
         try {
-            const res = await api.patch("/mypage/nickname", {
-                nickname: nicknameTrimmed,
-            });
+            const updated = await updateNickname(nicknameTrimmed);
 
-            const updated = res.data;
-
-            // 화면 갱신
             setUser((prev) => ({ ...prev, ...updated }));
 
-            // localStorage 갱신
             const prevLocal = JSON.parse(localStorage.getItem("loginUser")) ?? {};
-            localStorage.setItem("loginUser", JSON.stringify({ ...prevLocal, ...updated }));
+            localStorage.setItem(
+                "loginUser",
+                JSON.stringify({ ...prevLocal, ...updated })
+            );
 
             setIsEditingNickname(false);
         } catch (e) {
             alert(e?.response?.data?.message ?? "닉네임 변경 실패");
         }
     };
+
 
 
     const openPetRegister = () => {
