@@ -1,31 +1,71 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 import "./PostCreate.css";
 import { createPost, uploadImage } from "../../api/postsApi";
 
 export default function PostCreate() {
     const navigate = useNavigate();
-    const fileRef = useRef(null);
+    const quillRef = useRef(null);
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [imageFile, setImageFile] = useState(null);
+    // 본문에 포함된 이미지 URL들을 저장할 상태 (백엔드 전송용)
+    const [imageUrls, setImageUrls] = useState([]);
+
+    // 이미지 핸들러 - 에디터에 이미지를 올리면 실행
+    const imageHandler = () => {
+        const input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", "image/*");
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files[0];
+            if (file) {
+                try {
+                    // 백엔드에 이미지 파일 전송 및 URL 수신
+                    const url = await uploadImage(file);
+
+                    // 에디터 현재 커서 위치에 이미지 삽입
+                    const editor = quillRef.current.getEditor();
+                    const range = editor.getSelection();
+                    editor.insertEmbed(range.index, "image", url);
+
+                    // 백엔드에 보낼 이미지 리스트에 추가
+                    setImageUrls((prev) => [...prev, url]);
+                } catch (error) {
+                    console.error("이미지 업로드 실패:", error);
+                    alert("이미지 업로드에 실패했습니다.");
+                }
+            }
+        };
+    };
+
+    // Quill 모듈 설정
+    const modules = useMemo(() => ({
+        toolbar: {
+            container: [
+                [{ header: [1, 2, false] }],
+                ["bold", "italic", "underline", "strike"],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["image", "link"],
+                ["clean"],
+            ],
+            handlers: {
+                image: imageHandler, // 이미지 아이콘 클릭 시 핸들러 실행
+            },
+        },
+    }), []);
 
     const createMut = useMutation({
         mutationFn: async () => {
-            // 1) 이미지가 있으면 먼저 업로드해서 imageUrl 받기
-            let imageUrl = null;
-            if (imageFile) {
-                imageUrl = await uploadImage(imageFile); // "/images/xxxx.png" 같은 값 기대
-            }
-
-            // 2) 게시글 작성
-            return createPost({ title, content, imageUrl });
+            return createPost({ title, content, imageUrls });
         },
-        onSuccess: (saved) => {
-            // 저장 성공 시 목록으로 이동 (혹은 상세로 이동도 가능)
+        onSuccess: () => {
             navigate("/posts");
         },
         onError: (e) => {
@@ -33,15 +73,6 @@ export default function PostCreate() {
             alert("게시글 등록 실패");
         },
     });
-
-    const onPickImage = () => {
-        fileRef.current?.click();
-    };
-
-    const onChangeFile = (e) => {
-        const f = e.target.files?.[0];
-        setImageFile(f ?? null);
-    };
 
     const onSubmit = () => {
         if (!title.trim()) return alert("제목을 입력하세요");
@@ -56,12 +87,6 @@ export default function PostCreate() {
             <div className="pcCard">
                 <div className="pcHeaderRow">
                     <h3 className="pcFormTitle">글 등록</h3>
-
-                    {/* 우측 상단 동그란 프로필(스크린샷 느낌) 
-          <div className="pcProfileBubble" title="profile">
-            S
-          </div>
-          */}
                 </div>
 
                 <input
@@ -71,30 +96,22 @@ export default function PostCreate() {
                     onChange={(e) => setTitle(e.target.value)}
                 />
 
-                <textarea
-                    className="pcTextarea"
-                    placeholder="내용을 입력 하세요."
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                />
+                {/* ReactQuill 에디터 적용 */}
+                <div className="pcQuillWrapper">
+                    <ReactQuill
+                        ref={quillRef}
+                        theme="snow"
+                        placeholder="내용을 입력 하세요."
+                        value={content}
+                        onChange={setContent}
+                        modules={modules}
+                        style={{ height: "400px", marginBottom: "50px" }}
+                    />
+                </div>
 
-                {/* 하단 버튼 영역 */}
                 <div className="pcBottomRow">
-                    <div className="pcFileRow">
-                        <input
-                            ref={fileRef}
-                            type="file"
-                            accept="image/*"
-                            onChange={onChangeFile}
-                            className="pcHiddenFile"
-                        />
-                        <button type="button" className="pcFileBtn" onClick={onPickImage}>
-                            이미지 첨부
-                        </button>
-                        <span className="pcFileName">
-                            {imageFile ? imageFile.name : ""}
-                        </span>
-                    </div>
+                    {/* 기존의 개별 이미지 첨부 버튼 영역은 필요 없으므로 제거하거나 비워둠 */}
+                    <div className="pcFileRow"></div>
 
                     <div className="pcActionRow">
                         <button
