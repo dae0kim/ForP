@@ -12,14 +12,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class PostListResponse {
 
     private Long id;
     private String title; // 제목
     private MemberResponse author; // 작성자(id, nickname)
     private Integer readCount; // 조회 수
-    private LocalDateTime createdAt; // 작성일
+    private LocalDateTime rgstDate; // 작성일
 
     // Post entity -> 리스트 DTO
     public static PostListResponse from(Post post) {
@@ -28,7 +27,7 @@ public class PostListResponse {
                 .title(post.getTitle())
                 .author(MemberResponse.from(post.getUser())) // 작성자 매핑
                 .readCount(post.getReadCount())
-                .createdAt(post.getCreatedAt())
+                .rgstDate(post.getRgstDate())
                 .build();
     }
 }

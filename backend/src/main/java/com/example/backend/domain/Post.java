@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -18,14 +20,19 @@ import java.time.LocalDateTime;
 @Builder
 public class Post {
     
-    @Id // 기본키
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "post_seq_gen")
+    @SequenceGenerator(
+            name = "post_seq_gen",
+            sequenceName = "POST_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "post_id")
     private Long id;
 
     // 회원 1 : 게시글 N
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false) // 외래키로 멤버 아이디를 설정
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     // 제목, 필수값
@@ -38,7 +45,7 @@ public class Post {
     private String content;
 
     // 이미지, DB에 경로만 저장
-    @Column(name="image_url", length = 500)
+    @Column(name="image_url", length = 1000)
     private String imageUrl;
 
     // 조회수
@@ -47,13 +54,18 @@ public class Post {
 
     // 작성일
     @CreationTimestamp
-    @Column(name="created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name="rgst_date", nullable = false, updatable = false)
+    private LocalDateTime rgstDate;
 
     // 수정일
     @UpdateTimestamp
-    @Column(name="updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name="updt_date")
+    private LocalDateTime updtDate;
+
+    // 게시글 1 : 이미지 N
+    @Builder.Default
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostImage> images = new ArrayList<>();
 
     @PrePersist
     public void preCount() {
@@ -70,6 +82,12 @@ public class Post {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
+    }
+
+    // 이미지 추가 메서드
+    public void addImage(PostImage image) {
+        this.images.add(image);
+        image.setPost(this);
     }
 
 }
