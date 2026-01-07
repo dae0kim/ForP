@@ -75,11 +75,13 @@ function MyPage() {
         setIsEditingNickname(true);
     };
 
+    // 닉네임 저장 취소
     const cancelEditNickname = () => {
         setNicknameInput(user.nickname ?? "");
         setIsEditingNickname(false);
     };
 
+    // 닉네임 저장
     const saveNickname = async () => {
         if (!isNicknameValid) return;
 
@@ -103,6 +105,23 @@ function MyPage() {
     // 반려동물 등록 새 창 닫히면 목록 자동 새로고침
     const openPetRegister = () => {
         const w = window.open("/pet-register", "_blank", "width=1100,height=850");
+
+        const timer = setInterval(async () => {
+            if (!w || w.closed) {
+                clearInterval(timer);
+                try {
+                    const list = await getMyPets();
+                    setPets(list);
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        }, 500);
+    };
+
+    // 반려동물 수정 새 창 닫히면 목록 자동 새로고침
+    const openPetEdit = (petId) => {
+        const w = window.open(`/pet-edit/${petId}`, "_blank", "width=1100,height=850");
 
         const timer = setInterval(async () => {
             if (!w || w.closed) {
@@ -368,7 +387,7 @@ function MyPage() {
                                                         fullWidth
                                                         variant="contained"
                                                         sx={{ bgcolor: "#CFE9FF", color: "#1A1A1A", fontWeight: 900 }}
-                                                        onClick={() => alert("수정(추후 연결)")}
+                                                        onClick={() => openPetEdit(pet.petId)}
                                                     >
                                                         수정
                                                     </Button>
