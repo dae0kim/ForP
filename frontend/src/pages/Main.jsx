@@ -1,8 +1,8 @@
 import { Box, Card, CardContent, CardMedia, Stack, Typography, Avatar } from "@mui/material";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import { eventList } from "../data/events";
 
-function Main(props) {
+function Main() {
     const user = JSON.parse(localStorage.getItem("loginUser"));
 
     // ================== boardList ======================
@@ -40,7 +40,6 @@ function Main(props) {
     ]
 
     return (
-        <>
         <Stack direction="row" justifyContent="center">
             {/*================================ Left Area ========================================= */}
             <Box sx={{flex: 1}}>
@@ -164,8 +163,12 @@ function Main(props) {
             {/* 마이페이지 영역*/}
             <Box sx={{backgroundColor: '#F7F8FC', p: 3, borderRadius: 8 }}>
                 <Stack spacing={2}>
-                    <Card sx={{p:3, // 카드 안에 내용 padding
-                        borderRadius: 8}}>
+                    <Card 
+                    component={NavLink}
+                    to="/mypage"   
+                    sx={{p:3, // 카드 안에 내용 padding
+                    textDecoration:"none",
+                    borderRadius: 8}}>
                     <Typography variant="h6" component='h1'fontWeight={600} sx={{mb:2, fontSize: '32px'}}>마이페이지</Typography>
                     {user && (
                     <Stack direction="row" spacing={2} alignItems="center">
@@ -183,16 +186,13 @@ function Main(props) {
                                     </Stack>)}
                             </Card>
                         </Stack>
-                        {/* 내 반려동물 영역 
-                반려동물 페이지 만들어지면 url 연결 해서 완성할 예정
-                */}
+                        {/* 내 반려동물 영역 => 반려동물 페이지 만들어지면 url 연결 해서 완성할 예정 */}
                         <Stack spacing={2} sx={{ p: 3 }}>
                             <Typography variant="h6" component='h1' fontWeight={600} sx={{ mb: 2, fontSize: '32px' }}>내 반려동물</Typography>
                         </Stack>
                     </Box>
                 </Box>
             </Stack>
-        </>
     );
 }
 
