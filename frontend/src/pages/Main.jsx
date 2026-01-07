@@ -6,6 +6,7 @@ import { getMyPets } from "../api/petsApi";
 import PostItemCard from "../components/post/PostItemCard";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMainLatestPosts } from "../api/postsApi";
+import defaultProfile from "../assets/images/defaultImage.png";
 
 function Main() {
     const user = JSON.parse(localStorage.getItem("loginUser"));
@@ -34,12 +35,18 @@ function Main() {
 
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+    // 프로필 사진
     const getFullProfileImage = (url) => {
-        if (!url) return ""; // 혹은 기본 이미지 경로
-        // 카카오 프로필 등 외부 URL인 경우 그대로 반환
+        if (!url || url.trim() === "") return defaultProfile; // 기본 이미지 반환
         if (url.startsWith("http")) return url;
-        // 서버에 저장된 상대 경로인 경우 BASE_URL 결합
         return `${BASE_URL}${url}`;
+    };
+
+    // 반려동물 사진
+    const getPetImageUrl = (path) => {
+        if (!path) return "";
+        if (path.startsWith("blob:")) return path;
+        return `${BASE_URL}${path}`;
     };
 
     return (
@@ -127,7 +134,7 @@ function Main() {
                                 <Stack direction="row" spacing={2} alignItems="center">
                                     <CardMedia
                                         component="img"
-                                        image={getPetImageUrl(user.profileImage)}
+                                        image={getFullProfileImage(user.profileImage)}
                                         sx={{
                                             width: 76,
                                             height: 76,
@@ -172,7 +179,7 @@ function Main() {
                                         }}>
                                         <Box
                                             component="img"
-                                            src={pet.imageUrl}
+                                            src={getPetImageUrl(pet.imageUrl)}
                                             alt={pet.name}
                                             sx={{
                                                 width: "100%",
@@ -185,7 +192,7 @@ function Main() {
                                                 {pet.name}
                                             </Typography>
                                             <Typography variant="caption" color="text.secondary">
-                                                {pet.species} · {pet.gender}
+                                                {pet.species} · {pet.breed || "품종 없음"} · {pet.gender}
                                             </Typography>
                                         </Box>
                                     </Card>

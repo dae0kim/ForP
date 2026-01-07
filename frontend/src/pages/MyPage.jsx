@@ -15,6 +15,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getMyPageMe, updateNickname, updateProfileImage } from "../api/mypageApi";
 import { getMyPets, deletePet } from "../api/petsApi";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import defaultProfile from "../assets/images/defaultImage.png";
 
 function MyPage() {
     const [user, setUser] = useState(() => {
@@ -24,12 +25,9 @@ function MyPage() {
 
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-    // --- 추가된 이미지 경로 처리 함수 ---
     const getFullProfileImage = (url) => {
-        if (!url) return ""; // 혹은 기본 이미지 경로
-        // 카카오 프로필 등 외부 URL인 경우 그대로 반환
+        if (!url || url.trim() === "") return defaultProfile; // 기본 이미지 반환
         if (url.startsWith("http")) return url;
-        // 서버에 저장된 상대 경로인 경우 BASE_URL 결합
         return `${BASE_URL}${url}`;
     };
 
@@ -136,7 +134,14 @@ function MyPage() {
     }, []);
 
     const openPetRegister = () => {
-        const w = window.open("/pet-register", "_blank", "width=1100,height=850");
+        const width = 1100;
+        const height = 850;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
+
+        const options = `width=${width},height=${height},left=${left},top=${top},scrollbars=no,resizable=no`;
+        const w = window.open("/pet-register", "_blank", options);
+
         const timer = setInterval(async () => {
             if (!w || w.closed) {
                 clearInterval(timer);
@@ -149,7 +154,14 @@ function MyPage() {
     };
 
     const openPetEdit = (petId) => {
-        const w = window.open(`/pet-edit/${petId}`, "_blank", "width=1100,height=850");
+        const width = 1100;
+        const height = 850;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
+
+        const options = `width=${width},height=${height},left=${left},top=${top},scrollbars=no,resizable=no`;
+        const w = window.open(`/pet-edit/${petId}`, "_blank", options);
+
         const timer = setInterval(async () => {
             if (!w || w.closed) {
                 clearInterval(timer);
@@ -164,14 +176,14 @@ function MyPage() {
     return (
         <Stack>
             <Box>
-                <Container maxWidth={false} sx={{ width: 1346, py: 5, margin: "0 auto" }}>
+                <Container maxWidth={false} sx={{ width: 1450, py: 5, margin: "0 auto" }}>
                     <Typography sx={{ fontSize: 32, fontWeight: 800, mb: 3 }}>
                         마이페이지
                     </Typography>
 
                     <Grid container spacing={4}>
                         {/* 왼쪽: 내 정보 */}
-                        <Grid item xs={12} md={6}>
+                        <Grid item sx={{ width: 650 }}>
                             <Card sx={{ borderRadius: 6, p: 4, minHeight: 640, boxShadow: "0 10px 30px rgba(0,0,0,0.06)" }}>
                                 <Typography sx={{ fontSize: 28, fontWeight: 900, mb: 2 }}>내 정보</Typography>
                                 <Divider sx={{ mb: 4, borderColor: "#4DA3FF" }} />
@@ -287,7 +299,7 @@ function MyPage() {
                         </Grid>
 
                         {/* 오른쪽: 내 동물 정보 */}
-                        <Grid item xs={12} md={6}>
+                        <Grid item sx={{ width: 600 }}>
                             <Card sx={{ borderRadius: 6, p: 4, minHeight: 640, boxShadow: "0 10px 30px rgba(0,0,0,0.06)" }}>
                                 <Typography sx={{ fontSize: 28, fontWeight: 900, mb: 2 }}>내 동물 정보</Typography>
                                 <Divider sx={{ mb: 4, borderColor: "#4DA3FF" }} />
