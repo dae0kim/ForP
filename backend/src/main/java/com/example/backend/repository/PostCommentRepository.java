@@ -9,7 +9,7 @@ import java.util.List;
 public interface PostCommentRepository extends JpaRepository<PostComment,Long> {
 
     // 특정 게시글의 댓글을 작성일 기준으로 오름차순 정렬
-    List<PostComment> findByPostOrderByCreatedAtAsc(Post post);
+    List<PostComment> findByPostOrderByRgstDateAsc(Post post);
 
     void deleteByPostId(Long postId);
 
