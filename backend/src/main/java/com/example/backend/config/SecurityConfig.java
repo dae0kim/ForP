@@ -33,6 +33,10 @@ public class SecurityConfig {
                                 "/images/**"
                         ).permitAll()
 
+                        .requestMatchers("/api/mypage/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/mypage/profile-image").authenticated()
+
+
                         // 게시글 작성 중 이미지를 서버에 임시 저장(quill 에디터 관련)
                         .requestMatchers(HttpMethod.POST, "/api/images/**").authenticated()
 
@@ -49,7 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/posts/*/comments/**").authenticated()
 
                         // 이미지
-                        .requestMatchers("/images/**").authenticated()
+//                        .requestMatchers("/images/**").authenticated()
 
                         .anyRequest().authenticated()
 

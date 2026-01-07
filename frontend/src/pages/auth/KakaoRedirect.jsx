@@ -1,54 +1,100 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
-import { kakaoLogin, getMe } from '../../api/authApi'
+import { Box, Typography, LinearProgress, Container } from '@mui/material';
+import { kakaoLogin, getMe } from '../../api/authApi';
+import LoadingImage from '../../assets/images/loading_image.png';
 
 function KakaoRedirect() {
-
     const navigate = useNavigate();
     const calledRef = useRef(false);
 
     useEffect(() => {
-        // React StrictMode 대응 (2번 실행 방지)
         if (calledRef.current) return;
         calledRef.current = true;
 
-        const code = new URL(window.location.href)
-            .searchParams
-            .get("code");
-
+        const code = new URL(window.location.href).searchParams.get("code");
         if (!code) return;
 
         (async () => {
             try {
-                // 카카오 로그인 → JWT 수신
                 const token = await kakaoLogin(code);
-
-                // JWT 저장
                 localStorage.setItem("accessToken", token);
-
-                // 내 정보 조회
-                // const user = await getMe(token);
                 const user = await getMe();
 
-                alert(`${user.nickname}님 환영합니다`);
+                // 로딩 화면 연출용 시간지연 설정
+                await new Promise(resolve => setTimeout(resolve, 1500));
 
-                // 로그인 유저 저장
                 localStorage.setItem("loginUser", JSON.stringify(user));
-
                 navigate("/main");
-
             } catch (err) {
                 console.error("로그인 실패", err);
                 localStorage.removeItem("accessToken");
                 localStorage.removeItem("loginUser");
-                // 다시 로그인 화면으로 이동
                 navigate("/");
             }
         })();
+    }, [navigate]);
 
-    }, []);
+    return (
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100vh',
+                backgroundColor: '#f0f4f8',
+                textAlign: 'center',
+                px: 3
+            }}
+        >
+            <Container maxWidth="sm">
+                {/* 상단 텍스트 */}
+                <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 4, color: '#2c3e50' }}>
+                    로그인 진행 중...
+                </Typography>
 
-    return <div>카카오 로그인 처리 중...</div>;
+                {/* 로딩 이미지 */}
+                <Box
+                    component="img"
+                    src={LoadingImage}
+                    alt="Loading..."
+                    sx={{
+                        width: '100%',
+                        maxWidth: 400,
+                        height: 'auto',
+                        mb: 4,
+                        borderRadius: 4,
+                        animation: 'fadeIn 1s ease-in-out'
+                    }}
+                />
+
+                {/* 하단 로딩 바 */}
+                <Box sx={{ width: '80%', margin: '0 auto' }}>
+                    <LinearProgress
+                        sx={{
+                            height: 10,
+                            borderRadius: 5,
+                            backgroundColor: '#e0e0e0',
+                            '& .MuiLinearProgress-bar': {
+                                backgroundColor: '#4dabf7'
+                            }
+                        }}
+                    />
+                </Box>
+            </Container>
+
+            {/* 애니메이션 효과 */}
+            <style>
+                {`
+                    @keyframes fadeIn {
+                        from { opacity: 0; transform: translateY(10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                `}
+            </style>
+        </Box>
+    );
 }
 
 export default KakaoRedirect;
