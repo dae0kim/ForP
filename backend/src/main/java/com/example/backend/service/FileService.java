@@ -112,5 +112,34 @@ public class FileService {
         if (idx < 0) return "";
         return filename.substring(idx + 1).toLowerCase();
     }
+
+    // 게시판 전용 이미지 저장 메서드
+    public String savePostImage(MultipartFile file) {
+        validate(file);
+
+        try {
+            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            String ext = getExtLower(file.getOriginalFilename());
+            String normalizedExt = ext.equals("jpeg") ? "jpg" : ext;
+
+            String newFileName = UUID.randomUUID() + "." + normalizedExt;
+            Path target = uploadPath.resolve(newFileName).normalize();
+
+            if (!target.startsWith(uploadPath)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 접근입니다.");
+            }
+
+            file.transferTo(target.toFile());
+
+            return "/images/" + newFileName;
+        } catch (Exception e) {
+            log.error("Post image upload failed", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "게시글 이미지 업로드 실패");
+        }
+    }
 }
 

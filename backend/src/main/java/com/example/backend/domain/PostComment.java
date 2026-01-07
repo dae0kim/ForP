@@ -19,13 +19,18 @@ import java.time.LocalDateTime;
 public class PostComment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "post_comment_seq_gen")
+    @SequenceGenerator(
+            name = "post_comment_seq_gen",
+            sequenceName = "POST_COMMENT_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "comment_id")
     private Long id;
 
     // 회원 1 : 댓글 N
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false) // 외래키로 멤버 아이디를 설정
+    @JoinColumn(name = "user_id", nullable = false) // 외래키로 멤버 아이디를 설정
     private User user;
 
     // 댓글 N개 : 1개 게시글
