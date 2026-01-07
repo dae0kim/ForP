@@ -81,7 +81,7 @@ function PostForm({
 
     return (
         <Paper sx={{ borderRadius: "26px", p: { xs: 3, md: 4 }, boxShadow: "0 10px 24px rgba(0, 0, 0, 0.08)", border: "1px solid rgba(0, 0, 0, 0.05)" }}>
-            <Typography sx={{ mb: 3, fontSize: "20px", fontWeight: 900, color: "#0f172a" }}>
+            <Typography sx={{ mb: 3, fontSize: "32px", fontWeight: 700, color: "#0f172a" }}>
                 {mode === "create" ? "새 글 등록" : "글 수정"}
             </Typography>
 
@@ -104,14 +104,34 @@ function PostForm({
                 <Divider />
 
                 <Stack direction="row" justifyContent="flex-end" spacing={1.5} sx={{ mt: 1 }}>
-                    <Button variant="contained" onClick={onCancel} sx={{ height: "38px", px: 3, borderRadius: "10px", bgcolor: "#d9e9f7", color: "#475569", fontWeight: 800, boxShadow: "none", "&:hover": { bgcolor: "#cbdff0", boxShadow: "none" } }}>
+                    <Button variant="contained" 
+                    onClick={onCancel} 
+                    sx={{ 
+                        height: "38px", 
+                        px: 3, 
+                        borderRadius: "10px", 
+                        bgcolor: "#d9e9f7", 
+                        color: "#000", 
+                        fontWeight: 700, 
+                        fontSize:"20px",
+                        boxShadow: "none", 
+                        "&:hover": { bgcolor: "#cbdff0", boxShadow: "none" } }}
+                    >
                         취소
                     </Button>
                     <Button
                         variant="contained"
                         onClick={handleValidateAndSave}
                         disabled={isPending}
-                        sx={{ height: "38px", px: 3, borderRadius: "10px", bgcolor: "#8fc9f0", color: "#0b2239", fontWeight: 900, boxShadow: "none", "&:hover": { bgcolor: "#7ab8e0", boxShadow: "none" } }}
+                        sx={{ height: "38px",
+                        px: 3, 
+                        borderRadius: "10px", 
+                        bgcolor: "#8fc9f0", 
+                        color: "#000", 
+                        fontSize:"20px",
+                        fontWeight: 700, 
+                        boxShadow: "none", 
+                        "&:hover": { bgcolor: "#7ab8e0", boxShadow: "none" } }}
                     >
                         {isPending ? "처리 중..." : mode === "create" ? "등록" : "수정 완료"}
                     </Button>

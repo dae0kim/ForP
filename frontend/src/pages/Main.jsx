@@ -1,6 +1,10 @@
 import { Box, Card, CardContent, CardMedia, Stack, Typography, Avatar } from "@mui/material";
 import { Link, NavLink } from "react-router";
 import { eventList } from "../data/events";
+import { useEffect, useState } from "react";
+import { getMyPets } from "../api/petsApi";
+import eventImg from "../assets/images/event1.png";
+
 import PostItemCard from "../components/post/PostItemCard";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMainLatestPosts } from "../api/postsApi";
@@ -85,56 +89,95 @@ function Main() {
                         )}
                     </Stack>
                 </Box>
-            </Box>
-            {/*================================ Right Area ========================================= */}
-            <Box sx={{
-                pl: 4,
-                width: 440,
-                flexShrink: 0, // 수축 지수 0으로 설정하여 화면이 좁아져도 무조건 width 너비 유지
-            }}>
-                {/* 마이페이지 영역*/}
-                <Box sx={{ backgroundColor: '#F7F8FC', p: 3, borderRadius: 8 }}>
-                    <Stack spacing={2}>
-                        <Card
-                            component={NavLink}
-                            to="/mypage"
+        </Box>
+        {/*================================ Right Area ========================================= */}
+        <Box sx={{
+            pl: 4,
+            width: 440,
+            flexShrink: 0, // 수축 지수 0으로 설정하여 화면이 좁아져도 무조건 width 너비 유지
+        }}>
+            {/* 마이페이지 영역*/}
+            <Box sx={{backgroundColor: '#F7F8FC', p: 3, borderRadius: 8 }}>
+                <Stack spacing={2}>
+                    <Card 
+                    component={NavLink}
+                    to="/mypage"   
+                    sx={{p:3, // 카드 안에 내용 padding
+                    textDecoration:"none",
+                    borderRadius: 8
+                    }}>
+                    <Typography variant="h6" component='h1'fontWeight={600} sx={{mb:2, fontSize: '32px'}}>마이페이지</Typography>
+                    {user && (
+                    <Stack direction="row" spacing={2} alignItems="center">
+                    <CardMedia
+                    component="img"
+                    image={getPetImageUrl(user.profileImage)}
+                    sx={{
+                        width:76,
+                        height:76,
+                        borderRadius:'100%',
+                        objectFit:'cover',
+                        }} />
+                    <Typography fontWeight={500} sx={{ fontSize: '22px' }}>{user.nickname}</Typography>
+                    </Stack>)}
+                    </Card>
+                </Stack>
+                {/* 내 반려동물 영역 */}
+                <Stack spacing={2} sx={{ mt:3 }}>
+                    <Card component={NavLink} to="/mypage" 
+                    sx={{
+                        p:3, // 카드 안에 내용 padding
+                        textDecoration:"none",
+                        borderRadius: 8
+                        }}
+                    >
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography variant="h6" fontWeight={600} 
+                        sx={{ mb: 2, 
+                        fontSize: '32px' }}>내 반려동물</Typography>
+                        <Typography sx={{ fontSize: '22px' }}>총 {pets.length}마리</Typography>
+                    </Stack>   
+                    {/* 반려동물 카드 Grid */}
+                    <Box sx={{
+                        mt:2, 
+                        display:"grid",
+                        gridTemplateColumns:"1fr 1fr",
+                        gap:2,
+                    }}>
+                        {pets.map((pet) =>(
+                            <Card 
+                            key={pet.petId}
                             sx={{
-                                p: 3, // 카드 안에 내용 padding
-                                textDecoration: "none",
-                                borderRadius: 8
+                                borderRadius:6,
+                                overflow:"hidden",
+                                boxShadow:"0 6px 16px rgba(0,0,0,0.8)",
                             }}>
-                            <Typography variant="h6" component='h1' fontWeight={600} sx={{ mb: 2, fontSize: '32px' }}>마이페이지</Typography>
-                            {user && (
-                                <Stack direction="row" spacing={2} alignItems="center">
-                                    <CardMedia
-                                        component="img"
-                                        image={getPetImageUrl(user.profileImage)}
-                                        sx={{
-                                            width: 76,
-                                            height: 76,
-                                            borderRadius: '100%',
-                                            objectFit: 'cover',
-
-                                        }} />
-                                    <Typography fontWeight={500} sx={{ fontSize: '22px' }}>{user.nickname}</Typography>
-                                </Stack>)}
-                        </Card>
-                    </Stack>
-                    {/* 내 반려동물 영역 */}
-                    <Stack spacing={2} sx={{ p: 3 }}>
-                        <Typography
-                            component={NavLink}
-                            to="/mypage"
-                            variant="h6" fontWeight={600}
-                            sx={{
-                                mb: 2,
-                                fontSize: '32px',
-                                textDecoration: "none"
-                            }}>내 반려동물</Typography>
-                    </Stack>
-                </Box>
+                                <Box
+                                component="img"
+                                src={pet.imageUrl}
+                                alt={pet.name}
+                                sx={{
+                                    width:"100%",
+                                    height:140,
+                                    objectFit:"cover",
+                                }}
+                                />
+                                <Box sx={{p:2}}>
+                                    <Typography fontWeight={700}>
+                                        {pet.name}
+                                    </Typography>
+                                    <Typography variant="caption" color="text.secondary">
+                                    {pet.species} · {pet.gender}
+                                    </Typography>
+                                </Box>
+                            </Card>
+                        ))}
+                    </Box>
+                    </Card>
+                </Stack>
             </Box>
-        </Stack>
+        </Box>
+    </Stack>
     );
 }
 
