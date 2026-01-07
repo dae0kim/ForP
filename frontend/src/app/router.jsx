@@ -13,6 +13,7 @@ import Map from "../pages/Map";
 import MyPage from "../pages/MyPage";
 import PetRegister from "../pages/PetRegister";
 import NotFoundPage from "../pages/NotFoundPage";
+import PetEdit from "../pages/PetEdit";
 
 export const router = createBrowserRouter([
     // 최초 화면은 무조건 로그인 화면으로
@@ -29,6 +30,14 @@ export const router = createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <PetRegister />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: "/pet-edit/:petId",
+        element: (
+            <ProtectedRoute>
+                <PetEdit />
             </ProtectedRoute>
         ),
     },

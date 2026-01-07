@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     Box,
     Button,
@@ -14,9 +14,14 @@ import {
     RadioGroup,
     FormControlLabel,
 } from "@mui/material";
-import { registerPet } from "../api/petsApi";
+import { useParams } from "react-router-dom";
+import { getPet, updatePet } from "../api/petsApi";
 
-export default function PetRegister() {
+export default function PetEdit() {
+    const { petId } = useParams();
+
+    const [loading, setLoading] = useState(true);
+
     const [form, setForm] = useState({
         name: "",
         species: "",
@@ -26,7 +31,40 @@ export default function PetRegister() {
         weight: "",
         imageFile: null,
         imagePreview: "",
+        imageUrl: "", // ✅ 기존 이미지 URL
     });
+
+    // 최초 진입: 기존 데이터 불러오기
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const pet = await getPet(petId);
+
+                // species가 강아지/고양이/기타 외 값이면 기타로 넣고 speciesEtc에 채움
+                const knownSpecies = ["강아지", "고양이", "기타"];
+                const isKnown = knownSpecies.includes(pet.species);
+
+                setForm((prev) => ({
+                    ...prev,
+                    name: pet.name ?? "",
+                    species: isKnown ? pet.species : "기타",
+                    speciesEtc: isKnown ? "" : (pet.species ?? ""),
+                    breed: pet.breed ?? "",
+                    gender: pet.gender ?? "남",
+                    weight: pet.weight ?? "",
+                    imageUrl: pet.imageUrl ?? "",
+                    imagePreview: pet.imageUrl ?? "", // 미리보기는 기존 이미지로
+                    imageFile: null, // 수정 시작 시엔 null
+                }));
+            } catch (e) {
+                alert(e?.response?.data?.message ?? "반려동물 정보를 불러오지 못했습니다.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        load();
+    }, [petId]);
 
     const speciesFinal =
         form.species === "기타" ? form.speciesEtc.trim() : form.species.trim();
@@ -38,7 +76,8 @@ export default function PetRegister() {
             (form.species !== "기타" || form.speciesEtc.trim()) &&
             form.gender &&
             String(form.weight).trim() &&
-            form.imageFile
+            // 수정 기존 이미지 URL 있어도, 없어도 ok
+            (form.imageFile || form.imageUrl)
         );
     }, [form]);
 
@@ -66,7 +105,11 @@ export default function PetRegister() {
         }
 
         const preview = URL.createObjectURL(file);
-        setForm((prev) => ({ ...prev, imageFile: file, imagePreview: preview }));
+        setForm((prev) => ({
+            ...prev,
+            imageFile: file,
+            imagePreview: preview,
+        }));
     };
 
     const handleSubmit = async () => {
@@ -79,25 +122,35 @@ export default function PetRegister() {
                 breed: form.breed.trim(),
                 gender: form.gender,
                 weight: Number(form.weight),
+                imageUrl: form.imageUrl, // ✅ 파일 새로 안 올리면 기존 유지
             };
 
-            await registerPet({
+            await updatePet({
+                petId,
                 payload,
-                imageFile: form.imageFile,
+                imageFile: form.imageFile, // ✅ 있으면 업로드 후 imageUrl 갱신해서 PUT
             });
 
-            alert("등록 완료!");
+            alert("수정 완료!");
             window.close();
         } catch (e) {
-            alert(e?.response?.data?.message ?? "등록 실패");
+            alert(e?.response?.data?.message ?? "수정 실패");
         }
     };
+
+    if (loading) {
+        return (
+            <Box sx={{ minHeight: "100vh", bgcolor: "#EEF6FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography sx={{ fontWeight: 900 }}>불러오는 중...</Typography>
+            </Box>
+        );
+    }
 
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "#EEF6FF", py: 6 }}>
             <Container maxWidth={false} sx={{ width: 1100 }}>
                 <Typography sx={{ fontSize: 44, fontWeight: 900, textAlign: "center", mb: 4 }}>
-                    반려동물 등록
+                    반려동물 수정
                 </Typography>
 
                 <Card sx={{ borderRadius: 6, p: 5, boxShadow: "0 10px 30px rgba(0,0,0,0.08)" }}>
@@ -118,7 +171,12 @@ export default function PetRegister() {
                                 }}
                             >
                                 {form.imagePreview ? (
-                                    <Box component="img" src={form.imagePreview} alt="preview" sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                    <Box
+                                        component="img"
+                                        src={form.imagePreview}
+                                        alt="preview"
+                                        sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                    />
                                 ) : (
                                     <Typography sx={{ color: "text.secondary" }}>
                                         280x300 비율 권장
@@ -127,11 +185,11 @@ export default function PetRegister() {
                             </Box>
 
                             <Button component="label" variant="outlined" sx={{ mt: 2, borderRadius: 999, width: 420, height: 48, fontWeight: 800 }}>
-                                사진 선택
+                                사진 변경
                                 <input hidden type="file" accept="image/jpeg,image/png" onChange={onPickImage} />
                             </Button>
 
-                            <Typography sx={{ mt: 1, color: "text.secondary", fontSize: 13 , }}>
+                            <Typography sx={{ mt: 1, color: "text.secondary", fontSize: 13 }}>
                                 jpg/jpeg/png, 최대 5MB
                             </Typography>
                         </Box>
@@ -149,7 +207,6 @@ export default function PetRegister() {
                                 </Select>
                             </FormControl>
 
-                            {/* 종이 기타면 입력창 표시 */}
                             {form.species === "기타" && (
                                 <TextField
                                     label="종(기타)"
@@ -203,7 +260,7 @@ export default function PetRegister() {
                                 "&:hover": { bgcolor: "#A9D6FF" },
                             }}
                         >
-                            등록
+                            수정
                         </Button>
 
                         <Button

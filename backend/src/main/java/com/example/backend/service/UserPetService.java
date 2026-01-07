@@ -10,6 +10,9 @@ public interface UserPetService {
     // 조회
     List<UserPetResponse> findMyPets(Long userId);
 
+    // 단건 조회
+    UserPetResponse findMyPet(Long userId, Long PetId);
+
     // 작성
     UserPetResponse create(Long userId, PetCreateRequest request);
 

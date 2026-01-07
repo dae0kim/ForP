@@ -45,7 +45,7 @@ public class Pet {
     @Column(length = 100)
     private String breed;
 
-    // 성별 (남, 여, 중성)
+    // 성별 (남, 여, 중성, 없음)
     @Column(nullable = false, length = 20)
     private String gender;
 

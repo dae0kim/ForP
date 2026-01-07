@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,27 +61,21 @@ public class FileService {
         }
     }
 
-    // 삭제 이 부분 어떻게 코딩?
+    // 삭제
     public void deleteImage(String imageUrl) {
-        if (imageUrl == null || imageUrl.isBlank()) return;
-        if (!imageUrl.startsWith("/images")) return;
+        if(imageUrl == null || imageUrl.isBlank()) return;
 
-        String fileName = imageUrl.replace("/images/", "");
+        // "/images/파일명" -> 파일명
+        String fileName = imageUrl.replace("/images/", ""); // 앞에 있는걸 뒤에있는걸로 바꾸겠다?
 
+        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Path target = uploadPath.resolve(fileName).normalize();
+
+        // deleteIfExists : 파일 있으면 실행 없으면 실행 x
         try {
-            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
-            Path target = uploadPath.resolve(fileName).normalize();
-
-            if (!target.startsWith(uploadPath)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 파일 경로입니다.");
-            }
-
             Files.deleteIfExists(target);
-        } catch (ResponseStatusException e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("Image delete failed", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 삭제 실패");
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 삭제 중 오류 발생", e);
         }
     }
 
