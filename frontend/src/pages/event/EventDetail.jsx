@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import MbtiEvt from "./mbtiEvent/mbtiEvt";
+import MbtiEvt from "./mbtiEvent/MbtiEvt";
 function EventDetail() {
     const {id} = useParams();
     
