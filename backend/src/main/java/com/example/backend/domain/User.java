@@ -53,4 +53,9 @@ public class User {
 
     // 닉네임 수정
     public void updateNickname(String nickname){ this.nickname = nickname; }
+
+    // 프로필 사진 수정
+    public void updateProfileImage(String profileImage){
+        this.profileImage = profileImage;
+    }
 }

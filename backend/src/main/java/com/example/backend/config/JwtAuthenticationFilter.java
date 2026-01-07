@@ -41,4 +41,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        String method = request.getMethod();
+
+        if ("OPTIONS".equalsIgnoreCase(method)) return true;
+
+        return uri.startsWith("/images/")
+                || uri.equals("/api/auth/login/kakao")
+                || uri.startsWith("/api/files/");
+    }
 }

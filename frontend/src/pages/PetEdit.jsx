@@ -18,6 +18,15 @@ import { useParams } from "react-router-dom";
 import { getPet, updatePet } from "../api/petsApi";
 
 export default function PetEdit() {
+
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    const getPetImageUrl = (path) => {
+        if (!path) return "";
+        if (path.startsWith("blob:")) return path;
+        return `${BASE_URL}${path}`;
+    };
+
     const { petId } = useParams();
 
     const [loading, setLoading] = useState(true);
@@ -31,7 +40,7 @@ export default function PetEdit() {
         weight: "",
         imageFile: null,
         imagePreview: "",
-        imageUrl: "", // ✅ 기존 이미지 URL
+        imageUrl: "",
     });
 
     // 최초 진입: 기존 데이터 불러오기
@@ -53,8 +62,8 @@ export default function PetEdit() {
                     gender: pet.gender ?? "남",
                     weight: pet.weight ?? "",
                     imageUrl: pet.imageUrl ?? "",
-                    imagePreview: pet.imageUrl ?? "", // 미리보기는 기존 이미지로
-                    imageFile: null, // 수정 시작 시엔 null
+                    imagePreview: pet.imageUrl ?? "",
+                    imageFile: null,
                 }));
             } catch (e) {
                 alert(e?.response?.data?.message ?? "반려동물 정보를 불러오지 못했습니다.");
@@ -122,13 +131,13 @@ export default function PetEdit() {
                 breed: form.breed.trim(),
                 gender: form.gender,
                 weight: Number(form.weight),
-                imageUrl: form.imageUrl, // ✅ 파일 새로 안 올리면 기존 유지
+                imageUrl: form.imageUrl,
             };
 
             await updatePet({
                 petId,
                 payload,
-                imageFile: form.imageFile, // ✅ 있으면 업로드 후 imageUrl 갱신해서 PUT
+                imageFile: form.imageFile,
             });
 
             alert("수정 완료!");
@@ -173,7 +182,7 @@ export default function PetEdit() {
                                 {form.imagePreview ? (
                                     <Box
                                         component="img"
-                                        src={form.imagePreview}
+                                        src={getPetImageUrl(form.imagePreview)}
                                         alt="preview"
                                         sx={{ width: "100%", height: "100%", objectFit: "cover" }}
                                     />

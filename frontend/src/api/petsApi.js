@@ -29,7 +29,7 @@ export const registerPet = async ({ payload, imageFile }) => {
 // 조회
 export const getMyPets = async () => {
     const res = await api.get("/api/pets");
-    return res.data; // List<UserPetResponse>
+    return res.data;
 };
 
 // ID 반려동물 조회

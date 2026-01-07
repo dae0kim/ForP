@@ -27,10 +27,6 @@ public class FileService {
     private static final Set<String> ALLOWED_EXT = Set.of("jpg", "jpeg", "png");
 
     // 저장
-    /*
-    이미지 저장 후, 프론트에서 접근할 url 반환
-    ex) /images/uuid.jpg
-     */
     public String saveImage(MultipartFile file) {
         validate(file);
 

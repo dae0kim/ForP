@@ -14,3 +14,12 @@ export const updateNickname = async (nickname) => {
     });
     return res.data;
 };
+
+// 프로필 사진 수정
+export const updateProfileImage = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await api.put("/api/mypage/profile-image", formData);
+    return response.data;
+};
