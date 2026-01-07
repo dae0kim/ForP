@@ -33,6 +33,9 @@ public class PostImage {
 
     public void setPost(Post post) {
         this.post = post;
+        if (post != null && !post.getImages().contains(this)) {
+            post.getImages().add(this);
+        }
     }
 
     public static PostImage of(Post post, String imageUrl, String imageName) {
