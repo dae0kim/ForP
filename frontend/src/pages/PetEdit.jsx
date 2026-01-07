@@ -18,7 +18,6 @@ import { useParams } from "react-router-dom";
 import { getPet, updatePet } from "../api/petsApi";
 
 export default function PetEdit() {
-
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const getPetImageUrl = (path) => {
@@ -28,7 +27,6 @@ export default function PetEdit() {
     };
 
     const { petId } = useParams();
-
     const [loading, setLoading] = useState(true);
 
     const [form, setForm] = useState({
@@ -43,13 +41,10 @@ export default function PetEdit() {
         imageUrl: "",
     });
 
-    // 최초 진입: 기존 데이터 불러오기
     useEffect(() => {
         const load = async () => {
             try {
                 const pet = await getPet(petId);
-
-                // species가 강아지/고양이/기타 외 값이면 기타로 넣고 speciesEtc에 채움
                 const knownSpecies = ["강아지", "고양이", "기타"];
                 const isKnown = knownSpecies.includes(pet.species);
 
@@ -71,12 +66,10 @@ export default function PetEdit() {
                 setLoading(false);
             }
         };
-
         load();
     }, [petId]);
 
-    const speciesFinal =
-        form.species === "기타" ? form.speciesEtc.trim() : form.species.trim();
+    const speciesFinal = form.species === "기타" ? form.speciesEtc.trim() : form.species.trim();
 
     const canSubmit = useMemo(() => {
         return (
@@ -85,13 +78,21 @@ export default function PetEdit() {
             (form.species !== "기타" || form.speciesEtc.trim()) &&
             form.gender &&
             String(form.weight).trim() &&
-            // 수정 기존 이미지 URL 있어도, 없어도 ok
             (form.imageFile || form.imageUrl)
         );
     }, [form]);
 
     const onChange = (key) => (e) => {
-        const value = e.target.value;
+        let value = e.target.value;
+        if (key === "weight") {
+            value = value.replace(/[^0-9.]/g, "");
+            const parts = value.split(".");
+            if (parts.length > 2) return;
+            if (parts[1] && parts[1].length > 2) {
+                value = `${parts[0]}.${parts[1].slice(0, 2)}`;
+            }
+            if (Number(value) > 99.99) value = "99.99";
+        }
         setForm((prev) => ({
             ...prev,
             [key]: value,
@@ -108,6 +109,7 @@ export default function PetEdit() {
             alert("jpg, jpeg, png만 업로드 가능합니다.");
             return;
         }
+
         if (file.size > 5 * 1024 * 1024) {
             alert("최대 5MB까지 업로드 가능합니다.");
             return;
@@ -123,7 +125,10 @@ export default function PetEdit() {
 
     const handleSubmit = async () => {
         if (!canSubmit) return;
-
+        if (Number(form.weight) < 0.1) {
+            alert("몸무게는 최소 0.1kg 이상이어야 합니다.");
+            return;
+        }
         try {
             const payload = {
                 name: form.name.trim(),
@@ -133,13 +138,7 @@ export default function PetEdit() {
                 weight: Number(form.weight),
                 imageUrl: form.imageUrl,
             };
-
-            await updatePet({
-                petId,
-                payload,
-                imageFile: form.imageFile,
-            });
-
+            await updatePet({ petId, payload, imageFile: form.imageFile });
             alert("수정 완료!");
             window.close();
         } catch (e) {
@@ -149,22 +148,32 @@ export default function PetEdit() {
 
     if (loading) {
         return (
-            <Box sx={{ minHeight: "100vh", bgcolor: "#EEF6FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Box sx={{ height: "100vh", bgcolor: "#EEF6FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Typography sx={{ fontWeight: 900 }}>불러오는 중...</Typography>
             </Box>
         );
     }
 
     return (
-        <Box sx={{ minHeight: "100vh", bgcolor: "#EEF6FF", py: 6 }}>
-            <Container maxWidth={false} sx={{ width: 1100 }}>
+        <Box
+            sx={{
+                height: "100vh",
+                width: "100vw",
+                bgcolor: "#EEF6FF",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                overflow: "hidden", // 브라우저 전체 스크롤 제거
+            }}
+        >
+            {/* 컨텐츠 박스를 1200 * 1000으로 고정 */}
+            <Box sx={{ width: 1200, height: 1000, display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <Typography sx={{ fontSize: 44, fontWeight: 900, textAlign: "center", mb: 4 }}>
                     반려동물 수정
                 </Typography>
 
                 <Card sx={{ borderRadius: 6, p: 5, boxShadow: "0 10px 30px rgba(0,0,0,0.08)" }}>
                     <Box sx={{ display: "grid", gridTemplateColumns: "420px 1fr", gap: 5, alignItems: "start" }}>
-                        {/* 이미지 */}
                         <Box>
                             <Box
                                 sx={{
@@ -187,9 +196,7 @@ export default function PetEdit() {
                                         sx={{ width: "100%", height: "100%", objectFit: "cover" }}
                                     />
                                 ) : (
-                                    <Typography sx={{ color: "text.secondary" }}>
-                                        280x300 비율 권장
-                                    </Typography>
+                                    <Typography sx={{ color: "text.secondary" }}>280x300 비율 권장</Typography>
                                 )}
                             </Box>
 
@@ -198,15 +205,13 @@ export default function PetEdit() {
                                 <input hidden type="file" accept="image/jpeg,image/png" onChange={onPickImage} />
                             </Button>
 
-                            <Typography sx={{ mt: 1, color: "text.secondary", fontSize: 13 }}>
+                            <Typography sx={{ mt: 1, color: "text.secondary", fontSize: 13, textAlign: "center" }}>
                                 jpg/jpeg/png, 최대 5MB
                             </Typography>
                         </Box>
 
-                        {/* 폼 */}
                         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                             <TextField label="이름" value={form.name} onChange={onChange("name")} inputProps={{ maxLength: 10 }} />
-
                             <FormControl>
                                 <InputLabel id="species-label">종</InputLabel>
                                 <Select labelId="species-label" label="종" value={form.species} onChange={onChange("species")}>
@@ -215,25 +220,10 @@ export default function PetEdit() {
                                     <MenuItem value={"기타"}>기타</MenuItem>
                                 </Select>
                             </FormControl>
-
                             {form.species === "기타" && (
-                                <TextField
-                                    label="종(기타)"
-                                    placeholder="예: 토끼, 햄스터..."
-                                    value={form.speciesEtc}
-                                    onChange={onChange("speciesEtc")}
-                                    inputProps={{ maxLength: 20 }}
-                                />
+                                <TextField label="종(기타)" placeholder="예: 토끼, 햄스터..." value={form.speciesEtc} onChange={onChange("speciesEtc")} inputProps={{ maxLength: 10 }} />
                             )}
-
-                            <TextField
-                                label="품종"
-                                placeholder="품종을 입력하세요"
-                                value={form.breed}
-                                onChange={onChange("breed")}
-                                inputProps={{ maxLength: 20 }}
-                            />
-
+                            <TextField label="품종" placeholder="품종을 입력하세요" value={form.breed} onChange={onChange("breed")} inputProps={{ maxLength: 10 }} />
                             <Box>
                                 <Typography sx={{ fontWeight: 900, mb: 1 }}>성별</Typography>
                                 <RadioGroup row value={form.gender} onChange={onChange("gender")}>
@@ -243,14 +233,7 @@ export default function PetEdit() {
                                     <FormControlLabel value="없음" control={<Radio />} label="없음" />
                                 </RadioGroup>
                             </Box>
-
-                            <TextField
-                                label="몸무게(kg)"
-                                value={form.weight}
-                                onChange={onChange("weight")}
-                                type="number"
-                                inputProps={{ step: "0.1", min: "0.1", max: "99.99" }}
-                            />
+                            <TextField label="몸무게(kg)" value={form.weight} onChange={onChange("weight")} inputProps={{ inputMode: "decimal", placeholder: "0.00" }} />
                         </Box>
                     </Box>
 
@@ -271,17 +254,12 @@ export default function PetEdit() {
                         >
                             수정
                         </Button>
-
-                        <Button
-                            variant="outlined"
-                            onClick={() => window.close()}
-                            sx={{ width: 220, height: 52, borderRadius: 999, fontWeight: 900 }}
-                        >
+                        <Button variant="outlined" onClick={() => window.close()} sx={{ width: 220, height: 52, borderRadius: 999, fontWeight: 900 }}>
                             취소
                         </Button>
                     </Box>
                 </Card>
-            </Container>
+            </Box>
         </Box>
     );
 }

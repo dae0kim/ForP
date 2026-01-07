@@ -41,10 +41,12 @@ function Main() {
 
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-    const getPetImageUrl = (path) => {
-        if (!path) return "";
-        if (path.startsWith("blob:")) return path;
-        return `${BASE_URL}${path}`;
+    const getFullProfileImage = (url) => {
+        if (!url) return ""; // 혹은 기본 이미지 경로
+        // 카카오 프로필 등 외부 URL인 경우 그대로 반환
+        if (url.startsWith("http")) return url;
+        // 서버에 저장된 상대 경로인 경우 BASE_URL 결합
+        return `${BASE_URL}${url}`;
     };
 
     return (
@@ -185,7 +187,7 @@ function Main() {
                                 <Stack direction="row" spacing={2} alignItems="center">
                                     <CardMedia
                                         component="img"
-                                        image={getPetImageUrl(user.profileImage)}
+                                        image={getFullProfileImage(user.profileImage)}
                                         sx={{
                                             width: 76,
                                             height: 76,
