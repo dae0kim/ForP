@@ -28,6 +28,14 @@ export default function PetRegister() {
         imagePreview: "",
     });
 
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    const getPetImageUrl = (path) => {
+        if (!path) return "";
+        if (path.startsWith("blob:")) return path;
+        return `${BASE_URL}${path}`;
+    };
+
     const speciesFinal =
         form.species === "기타" ? form.speciesEtc.trim() : form.species.trim();
 
@@ -118,7 +126,11 @@ export default function PetRegister() {
                                 }}
                             >
                                 {form.imagePreview ? (
-                                    <Box component="img" src={form.imagePreview} alt="preview" sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                    <Box
+                                        component="img"
+                                        src={getPetImageUrl(form.imagePreview)}
+                                        alt="preview"
+                                        sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                 ) : (
                                     <Typography sx={{ color: "text.secondary" }}>
                                         280x300 비율 권장
@@ -131,7 +143,7 @@ export default function PetRegister() {
                                 <input hidden type="file" accept="image/jpeg,image/png" onChange={onPickImage} />
                             </Button>
 
-                            <Typography sx={{ mt: 1, color: "text.secondary", fontSize: 13 , }}>
+                            <Typography sx={{ mt: 1, color: "text.secondary", fontSize: 13, }}>
                                 jpg/jpeg/png, 최대 5MB
                             </Typography>
                         </Box>
