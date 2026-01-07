@@ -3,14 +3,14 @@ import { Link, NavLink } from "react-router";
 import { eventList } from "../data/events";
 import { useEffect, useState } from "react";
 import { getMyPets } from "../api/petsApi";
-import eventImg from "../assets/images/event1.png";
-
 import PostItemCard from "../components/post/PostItemCard";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMainLatestPosts } from "../api/postsApi";
 
 function Main() {
     const user = JSON.parse(localStorage.getItem("loginUser"));
+    
+    const [pets, setPets] = useState([]);
 
     // 게시글 데이터
     const { data, isLoading, isError } = useQuery({
@@ -18,6 +18,19 @@ function Main() {
         queryFn: fetchMainLatestPosts,
     });
     const posts = data?.content || [];
+
+    // 반려동물 데이터 로딩 로직
+    useEffect(() => {
+        const loadPets = async () => {
+            try {
+                const list = await getMyPets();
+                setPets(list || []); // 가져온 데이터를 상태에 저장
+            } catch (e) {
+                console.error("반려동물 로딩 실패:", e);
+            }
+        };
+        loadPets();
+    }, []);
 
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
