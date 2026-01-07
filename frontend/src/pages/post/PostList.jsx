@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { Box, Container, Button } from "@mui/material";
+import { Box, Container, Button, Stack } from "@mui/material";
 
 import { fetchPosts } from "../../api/postsApi";
 import PostSearch from "../../components/post/PostSearch";
@@ -32,8 +32,9 @@ export default function PostList() {
     };
 
     return (
-        <Box sx={{ minHeight: "100vh", bgcolor: "#eef7ff", py: 4 }}>
-            <Container maxWidth="md">
+        <Stack direction="row" justifyContent="center">
+            <Box sx={{ width:"100%",minHeight: "100vh", py: 4 }}>
+                <Container maxWidth="xl">
                 {/* --- 검색바 --- */}
                 <PostSearch
                     keyword={keyword} setKeyword={setKeyword}
@@ -55,7 +56,7 @@ export default function PostList() {
                         sx={{
                             bgcolor: "#bfe3ff",
                             color: "#1f2a37",
-                            fontSize: "12px",
+                            fontSize: "20px",
                             boxShadow: "none",
                             borderRadius: "10px",
                             border: "1px solid #a8d7ff",
@@ -74,5 +75,7 @@ export default function PostList() {
                 />
             </Container>
         </Box>
+        </Stack>
+        
     );
 }

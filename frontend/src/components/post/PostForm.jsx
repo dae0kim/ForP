@@ -12,48 +12,6 @@ function PostForm({
 }) {
     const quillRef = useRef(null);
 
-    // 유효성 검사 및 저장 핸들러
-    const handleValidateAndSave = () => {
-        // 제목 유효성 검사
-        if (!title.trim()) {
-            alert("제목을 입력하세요.");
-            return;
-        }
-
-        // 본문 유효성 검사
-        const plainText = content.replace(/<[^>]*>?/gm, '').trim();
-
-        // 이미지 태그(<img)가 포함되어 있는지도 확인 (텍스트는 없지만 이미지만 있을 수 있으므로)
-        const hasImage = content.includes('<img');
-
-        if (!plainText && !hasImage) {
-            alert("내용을 입력하세요.");
-            return;
-        }
-
-        // 모든 조건 만족 시 저장
-        onSave();
-    };
-
-    // 이미지 핸들러
-    const imageHandler = () => {
-        const input = document.createElement("input");
-        input.setAttribute("type", "file");
-        input.setAttribute("accept", "image/*");
-        input.click();
-        input.onchange = async () => {
-            const file = input.files[0];
-            if (file) {
-                try {
-                    const url = await uploadImage(file);
-                    const editor = quillRef.current.getEditor();
-                    const range = editor.getSelection();
-                    editor.insertEmbed(range.index, "image", url);
-                } catch (error) { console.error("이미지 업로드 실패:", error); }
-            }
-        };
-    };
-
     const modules = useMemo(() => ({
         toolbar: {
             container: [
@@ -63,13 +21,67 @@ function PostForm({
                 ["image", "link"],
                 ["clean"],
             ],
-            handlers: { image: imageHandler },
+            handlers: {
+                image: function () {
+                    const input = document.createElement("input");
+                    input.setAttribute("type", "file");
+                    input.setAttribute("accept", "image/*");
+                    input.click();
+
+                    input.onchange = async () => {
+                        const file = input.files[0];
+                        if (file) {
+                            try {
+                                const resUrl = await uploadImage(file);
+
+                                const fullUrl = resUrl.startsWith('http')
+                                    ? resUrl
+                                    : `${import.meta.env.VITE_API_BASE_URL}${resUrl}`;
+
+                                const editor = quillRef.current.getEditor();
+                                const range = editor.getSelection();
+                                editor.insertEmbed(range.index, "image", fullUrl);
+                            } catch (error) {
+                                console.error("이미지 업로드 실패:", error);
+                                alert("이미지 업로드 중 오류가 발생했습니다.");
+                            }
+                        }
+                    };
+                }
+            },
         },
     }), []);
 
+    // 유효성 검사 및 저장 핸들러
+    const handleValidateAndSave = () => {
+        if (!title.trim()) {
+            alert("제목을 입력하세요.");
+            return;
+        }
+
+        const plainText = content.replace(/<[^>]*>?/gm, '').trim();
+        const hasImage = content.includes('<img');
+
+        if (!plainText && !hasImage) {
+            alert("내용을 입력하세요.");
+            return;
+        }
+
+        const extractImageUrls = (html) => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const imgs = doc.querySelectorAll('img');
+            return Array.from(imgs).map(img => img.getAttribute('src'));
+        };
+
+        const imageUrls = extractImageUrls(content);
+
+        onSave(imageUrls);
+    };
+
     return (
         <Paper sx={{ borderRadius: "26px", p: { xs: 3, md: 4 }, boxShadow: "0 10px 24px rgba(0, 0, 0, 0.08)", border: "1px solid rgba(0, 0, 0, 0.05)" }}>
-            <Typography sx={{ mb: 3, fontSize: "20px", fontWeight: 900, color: "#0f172a" }}>
+            <Typography sx={{ mb: 3, fontSize: "32px", fontWeight: 700, color: "#0f172a" }}>
                 {mode === "create" ? "새 글 등록" : "글 수정"}
             </Typography>
 
@@ -92,14 +104,34 @@ function PostForm({
                 <Divider />
 
                 <Stack direction="row" justifyContent="flex-end" spacing={1.5} sx={{ mt: 1 }}>
-                    <Button variant="contained" onClick={onCancel} sx={{ height: "38px", px: 3, borderRadius: "10px", bgcolor: "#d9e9f7", color: "#475569", fontWeight: 800, boxShadow: "none", "&:hover": { bgcolor: "#cbdff0", boxShadow: "none" } }}>
+                    <Button variant="contained" 
+                    onClick={onCancel} 
+                    sx={{ 
+                        height: "38px", 
+                        px: 3, 
+                        borderRadius: "10px", 
+                        bgcolor: "#d9e9f7", 
+                        color: "#000", 
+                        fontWeight: 700, 
+                        fontSize:"20px",
+                        boxShadow: "none", 
+                        "&:hover": { bgcolor: "#cbdff0", boxShadow: "none" } }}
+                    >
                         취소
                     </Button>
                     <Button
                         variant="contained"
                         onClick={handleValidateAndSave}
                         disabled={isPending}
-                        sx={{ height: "38px", px: 3, borderRadius: "10px", bgcolor: "#8fc9f0", color: "#0b2239", fontWeight: 900, boxShadow: "none", "&:hover": { bgcolor: "#7ab8e0", boxShadow: "none" } }}
+                        sx={{ height: "38px",
+                        px: 3, 
+                        borderRadius: "10px", 
+                        bgcolor: "#8fc9f0", 
+                        color: "#000", 
+                        fontSize:"20px",
+                        fontWeight: 700, 
+                        boxShadow: "none", 
+                        "&:hover": { bgcolor: "#7ab8e0", boxShadow: "none" } }}
                     >
                         {isPending ? "처리 중..." : mode === "create" ? "등록" : "수정 완료"}
                     </Button>

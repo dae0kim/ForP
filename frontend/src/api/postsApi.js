@@ -6,6 +6,12 @@ export async function fetchPosts({ page, size, keyword, mine }) {
     return res.data;
 }
 
+// 메인화면 게시판 목록 전용
+export async function fetchMainLatestPosts() {
+    const res = await api.get("/api/posts", { params: { size: 3 } });
+    return res.data;
+};
+
 // 상세
 export async function fetchPostDetail(postId) {
     const res = await api.get(`/api/posts/${postId}`);
