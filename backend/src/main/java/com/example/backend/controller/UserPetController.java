@@ -39,6 +39,12 @@ public class UserPetController {
         return petService.findMyPets(userId());
     }
 
+    // 단건 조회 (수정 페이지에서 사용)
+    @GetMapping("/{petId}")
+    public UserPetResponse getOne(@PathVariable Long petId) {
+        return petService.findMyPet(userId(), petId);
+    }
+
     // 수정
     @PutMapping("/{petId}")
     public UserPetResponse update(

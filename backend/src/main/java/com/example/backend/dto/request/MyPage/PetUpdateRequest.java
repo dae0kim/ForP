@@ -26,7 +26,7 @@ public class PetUpdateRequest {
     private String breed;
 
     @NotBlank(message = "성별을 선택해주세요.")
-    @Pattern(regexp = "^(남|여|중성)$", message = "성별은 남/여/중성 중 하나여야 합니다.")
+    @Pattern(regexp = "^(남|여|중성|없음)$", message = "성별은 남/여/중성/없음 중 하나여야 합니다.")
     private String gender;
 
     @NotNull(message = "몸무게는 필수입니다.")
