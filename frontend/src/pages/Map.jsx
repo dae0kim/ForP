@@ -5,7 +5,7 @@ import { Alert, AlertTitle, Container, Typography } from '@mui/material';
 function Map() {
     return (
         <Container>
-            <Typography variant="h4" sx={{ mt: 4 }}>
+            <Typography variant="h4" sx={{ mt: 4 ,mb:4 }}>
                 주변 동물병원 지도
             </Typography>
             {/* 지도 컴포넌트 */}

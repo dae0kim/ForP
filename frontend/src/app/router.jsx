@@ -13,6 +13,7 @@ import Map from "../pages/Map";
 import MyPage from "../pages/MyPage";
 import PetRegister from "../pages/PetRegister";
 import NotFoundPage from "../pages/NotFoundPage";
+import EventDetail from "../pages/event/EventDetail";
 import PetEdit from "../pages/PetEdit";
 
 export const router = createBrowserRouter([
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
             {
                 path: "/events",
                 element: <EventList />,
+            },
+            {
+                path:"events/:id",
+                element: <EventDetail />,
             },
             {
                 path: "/map",
