@@ -41,7 +41,7 @@ public class PostCommentServiceImpl implements PostCommentService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
 
-        List<PostComment> comments = postCommentRepository.findByPostOrderByCreatedAtAsc(post);
+        List<PostComment> comments = postCommentRepository.findByPostOrderByRgstDateAsc(post);
 
         // DTO 리스트로 변환
         return comments.stream().map(PostCommentResponse::from).toList();

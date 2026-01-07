@@ -11,12 +11,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class PostCommentResponse {
-    private Long id; // 아이디
-    private String content; // 내용
-    private LocalDateTime createdAt; // 작성일
-    private LocalDateTime updateAt; // 수정일
+    private Long id;
+    private String content;
+    private LocalDateTime rgstDate;
+    private LocalDateTime updtDate;
     private MemberResponse author;
 
     // Entity -> DTO
@@ -24,9 +23,9 @@ public class PostCommentResponse {
         return PostCommentResponse.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
-                .author(MemberResponse.from(comment.getUser())) // 작성자 매핑
-                .createdAt(comment.getCreatedAt())
-                .updateAt(comment.getUpdatedAt())
+                .author(MemberResponse.from(comment.getUser()))
+                .rgstDate(comment.getRgstDate())
+                .updtDate(comment.getUpdtDate())
                 .build();
     }
 
