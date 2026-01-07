@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class PostDetailResponse {
 
     private Long id;
@@ -24,8 +23,8 @@ public class PostDetailResponse {
     private String imageUrl;
     private MemberResponse author; // 작성자(id, nickname)
     private Integer readCount;
-    private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime rgstDate;
+    private LocalDateTime updtDate;
 
     // Post entity -> 상세 응답 DTO
     public static PostDetailResponse from(Post post) {
@@ -36,8 +35,8 @@ public class PostDetailResponse {
                 .author(MemberResponse.from(post.getUser()))
                 .imageUrl(post.getImageUrl())
                 .readCount(post.getReadCount())
-                .createdAt(post.getCreatedAt())
-                .updateAt(post.getUpdatedAt())
+                .rgstDate(post.getRgstDate())
+                .updtDate(post.getUpdtDate())
                 .build();
     }
 }

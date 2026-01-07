@@ -12,21 +12,34 @@ import lombok.*;
 public class PostImage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "post_image_seq_gen")
+    @SequenceGenerator(
+            name = "post_image_seq_gen",
+            sequenceName = "POST_IMAGE_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "post_image_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", nullable = true)
     private Post post;
 
-    @Column(name = "image_url", nullable = false, length = 500)
+    @Column(name = "image_url", nullable = false, length = 1000)
     private String imageUrl;
 
-    public static PostImage of(Post post, String imageUrl) {
+    @Column(name = "image_name")
+    private String imageName;
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public static PostImage of(Post post, String imageUrl, String imageName) {
         return PostImage.builder()
                 .post(post)
                 .imageUrl(imageUrl)
+                .imageName(imageName)
                 .build();
     }
 }

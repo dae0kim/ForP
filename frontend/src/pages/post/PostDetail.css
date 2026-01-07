@@ -300,3 +300,15 @@
 .pdMiniBtn.danger {
     color: #b00020;
 }
+
+/* 본문 안의 이미지가 영역을 벗어나지 않게 설정 */
+.ql-editor img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 에디터 기본 여백 제거 */
+.ql-editor {
+    padding: 0;
+    overflow-y: visible;
+}
