@@ -3,13 +3,27 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Box, Typography, Avatar, Button, TextField, Stack } from "@mui/material";
 import { fetchComments, createComment, updateComment, deleteComment } from "../../api/commentsApi";
 
-// 게시판 하단 댓글 영역 컴포넌트
 function PostComments({ postId, myId }) {
     const qc = useQueryClient();
     const [commentText, setCommentText] = useState("");
     const [commentError, setCommentError] = useState("");
     const [editingId, setEditingId] = useState(null);
     const [editingText, setEditingText] = useState("");
+
+    // 날짜 포맷팅
+    const fmtDate = (v) => {
+        if (!v) return "";
+        const date = new Date(v);
+        if (isNaN(date.getTime())) return "";
+
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        const hh = String(date.getHours()).padStart(2, '0');
+        const mi = String(date.getMinutes()).padStart(2, '0');
+
+        return `${yyyy}.${mm}.${dd} ${hh}:${mi}`;
+    };
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ["comments", postId],
@@ -20,20 +34,19 @@ function PostComments({ postId, myId }) {
     const comments = useMemo(() => {
         const list = Array.isArray(data) ? data : data?.items ?? data?.content ?? [];
         return [...list].sort((a, b) => {
-            const at = new Date(a.createdAt ?? a.createdDate ?? 0).getTime();
-            const bt = new Date(b.createdAt ?? b.createdDate ?? 0).getTime();
+            const at = new Date(a.rgstDate ?? 0).getTime();
+            const bt = new Date(b.rgstDate ?? 0).getTime();
             return bt - at;
         });
     }, [data]);
 
+    // Mutation 로직 (동일하여 생략 가능하지만 구조 유지)
     const createMut = useMutation({
         mutationFn: (content) => createComment(postId, content),
         onSuccess: async () => {
             setCommentText("");
             await qc.invalidateQueries({ queryKey: ["comments", postId] });
-            await qc.invalidateQueries({ queryKey: ["post", postId] });
         },
-        onError: () => alert("댓글 등록 실패"),
     });
 
     const updateMut = useMutation({
@@ -42,16 +55,13 @@ function PostComments({ postId, myId }) {
             setEditingId(null);
             await qc.invalidateQueries({ queryKey: ["comments", postId] });
         },
-        onError: () => alert("댓글 수정 실패"),
     });
 
     const deleteMut = useMutation({
         mutationFn: (commentId) => deleteComment(postId, commentId),
         onSuccess: async () => {
             await qc.invalidateQueries({ queryKey: ["comments", postId] });
-            await qc.invalidateQueries({ queryKey: ["post", postId] });
         },
-        onError: () => alert("댓글 삭제 실패"),
     });
 
     const onSubmitComment = (e) => {
@@ -69,7 +79,7 @@ function PostComments({ postId, myId }) {
                 댓글 {comments.length}
             </Typography>
 
-            {/* 입력 폼 */}
+            {/* 입력 폼 (기존과 동일) */}
             <Box component="form" onSubmit={onSubmitComment} sx={{ mb: 5 }}>
                 <Box sx={{ display: "flex", gap: 1.5 }}>
                     <TextField
@@ -80,10 +90,21 @@ function PostComments({ postId, myId }) {
                         sx={{ "& .MuiOutlinedInput-root": { borderRadius: "12px", bgcolor: "#f8fafc" } }}
                     />
                     <Button
-                        variant="contained" type="submit" disabled={createMut.isPending}
+                        variant="contained"
+                        type="submit"
+                        disabled={createMut.isPending}
                         sx={{
-                            bgcolor: "#3b82f6", color: "#fff", px: 3, borderRadius: "12px", height: "40px",
-                            fontWeight: 700, minWidth: "fit-content", whiteSpace: "nowrap", boxShadow: "none"
+                            bgcolor: "#C2E7FE",
+                            color: "#fff",
+                            px: 2.5,
+                            borderRadius: "12px",
+                            height: "40px",
+                            fontWeight: 700,
+                            boxShadow: "none",
+                            minWidth: "64px",
+                            flexShrink: 0,
+                            whiteSpace: "nowrap",
+                            "&:hover": { bgcolor: "#2563eb", boxShadow: "none" }
                         }}
                     >
                         등록
@@ -98,22 +119,50 @@ function PostComments({ postId, myId }) {
                     const isEditing = editingId === cid;
                     const isOwner = myId != null && Number(myId) === Number(c.author?.id ?? c.memberId);
 
+                    // 시간 데이터 추출 (밀리초 단위로 변환하여 비교)
+                    const rgstTime = c.rgstDate ? new Date(c.rgstDate).getTime() : 0;
+                    const updtTime = c.updtDate ? new Date(c.updtDate).getTime() : 0;
+
+                    // 화면 표시용 포맷팅
+                    const rgstDateFmt = fmtDate(c.rgstDate);
+                    const updtDateFmt = fmtDate(c.updtDate);
+
+                    // 수정 여부 판단 (1초 이상의 유의미한 차이가 있을 때만 수정으로 간주)
+                    const isEdited = updtTime > 0 && rgstTime > 0 && Math.abs(updtTime - rgstTime) > 1000;
+
                     return (
                         <Stack key={cid} direction="row" spacing={2}>
                             <Avatar sx={{ width: 36, height: 36, bgcolor: "#e2e8f0" }} />
                             <Box sx={{ flex: 1 }}>
-                                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}>
-                                    <Typography sx={{ fontWeight: 700, fontSize: "14px" }}>
-                                        {c.author?.nickname ?? "익명"}
-                                    </Typography>
+                                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                                    <Box>
+                                        {/* 이름 */}
+                                        <Typography sx={{ fontWeight: 700, fontSize: "14px", color: "#334155" }}>
+                                            {c.author?.nickname ?? "익명"}
+                                        </Typography>
+                                        {/* 시간 */}
+                                        <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 0.2, mb: 0.5 }}>
+                                            <Typography sx={{ color: "#94a3b8", fontSize: "12px" }}>
+                                                {rgstDateFmt}
+                                            </Typography>
+                                            {isEdited && (
+                                                <Typography sx={{ color: "#3b82f6", fontSize: "12px", fontWeight: 500 }}>
+                                                    (수정 {updtDateFmt})
+                                                </Typography>
+                                            )}
+                                        </Stack>
+                                    </Box>
+
+                                    {/* 수정/삭제 버튼 */}
                                     {isOwner && !isEditing && (
                                         <Stack direction="row" spacing={0.5}>
-                                            <Button size="small" sx={{ color: "#64748b", minWidth: 0 }} onClick={() => { setEditingId(cid); setEditingText(c.content); }}>수정</Button>
-                                            <Button size="small" sx={{ color: "#ef4444", minWidth: 0 }} onClick={() => window.confirm("댓글을 삭제할까요?") && deleteMut.mutate(cid)}>삭제</Button>
+                                            <Button size="small" sx={{ color: "#64748b", minWidth: 0, fontSize: "12px" }} onClick={() => { setEditingId(cid); setEditingText(c.content); }}>수정</Button>
+                                            <Button size="small" sx={{ color: "#ef4444", minWidth: 0, fontSize: "12px" }} onClick={() => window.confirm("댓글을 삭제할까요?") && deleteMut.mutate(cid)}>삭제</Button>
                                         </Stack>
                                     )}
                                 </Box>
 
+                                {/* 댓글 본문 영역 */}
                                 {isEditing ? (
                                     <Box sx={{ mt: 1 }}>
                                         <TextField fullWidth size="small" value={editingText} onChange={(e) => setEditingText(e.target.value)} sx={{ mb: 1 }} />
@@ -123,7 +172,7 @@ function PostComments({ postId, myId }) {
                                         </Stack>
                                     </Box>
                                 ) : (
-                                    <Typography sx={{ fontSize: "14px", color: "#334155", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
+                                    <Typography sx={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, whiteSpace: "pre-wrap", mt: 0.5 }}>
                                         {c.content}
                                     </Typography>
                                 )}
