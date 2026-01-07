@@ -93,7 +93,6 @@ export default function PetRegister() {
         }
     };
 
-
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "#EEF6FF", py: 6 }}>
             <Container maxWidth={false} sx={{ width: 1100 }}>
