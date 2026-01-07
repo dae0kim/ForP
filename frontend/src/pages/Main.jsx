@@ -186,9 +186,17 @@ function Main() {
                                     </Stack>)}
                             </Card>
                         </Stack>
-                        {/* 내 반려동물 영역 => 반려동물 페이지 만들어지면 url 연결 해서 완성할 예정 */}
+                        {/* 내 반려동물 영역 */}
                         <Stack spacing={2} sx={{ p: 3 }}>
-                            <Typography variant="h6" component='h1' fontWeight={600} sx={{ mb: 2, fontSize: '32px' }}>내 반려동물</Typography>
+                            <Typography 
+                            component={NavLink}
+                            to="/mypage"   
+                            variant="h6" fontWeight={600} 
+                            sx={{ 
+                                mb: 2, 
+                                fontSize: '32px',
+                                textDecoration:"none" 
+                                }}>내 반려동물</Typography>
                         </Stack>
                     </Box>
                 </Box>

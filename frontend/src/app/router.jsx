@@ -13,6 +13,7 @@ import Map from "../pages/Map";
 import MyPage from "../pages/MyPage";
 import PetRegister from "../pages/PetRegister";
 import NotFoundPage from "../pages/NotFoundPage";
+import EventDetail from "../pages/event/EventDetail";
 
 export const router = createBrowserRouter([
     // 최초 화면은 무조건 로그인 화면으로
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
             {
                 path: "/events",
                 element: <EventList />,
+            },
+            {
+                path:"events/:id",
+                element: <EventDetail />,
             },
             {
                 path: "/map",

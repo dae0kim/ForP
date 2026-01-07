@@ -1,11 +1,14 @@
 // MBTI 반려동물 이벤트 메인
 
-function mbtiEvt(props) {
+import { Box, Typography } from "@mui/material";
+
+function MbtiEvt(props) {
     return (
-        <div>
-            
-        </div>
+        <Box>
+            <p>이벤트 1</p>
+
+        </Box>
     );
 }
 
-export default mbtiEvt;
+export default MbtiEvt;
