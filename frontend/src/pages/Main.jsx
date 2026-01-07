@@ -1,9 +1,29 @@
 import { Box, Card, CardContent, CardMedia, Stack, Typography, Avatar } from "@mui/material";
 import { Link, NavLink } from "react-router";
 import { eventList } from "../data/events";
+import { useEffect, useState } from "react";
+import { getMyPets } from "../api/petsApi";
+import eventImg from "../assets/images/event1.png";
+
 
 function Main() {
     const user = JSON.parse(localStorage.getItem("loginUser"));
+    
+    const [pets, setPets] = useState([]);
+
+    // 반려동물 데이터 로딩
+    useEffect(() => {
+        const loadPets = async() =>{
+            try{
+                const list = await getMyPets();
+                setPets(list || []);
+            }catch(e){
+                console.log(e);
+            }
+        };
+        loadPets();
+    }, []);
+
 
     // ================== boardList ======================
     const boardList = [
@@ -11,7 +31,7 @@ function Main() {
             id: 1,
             title: "반려동물 콘테스트에 나가는 사람",
             content: "지금 우리 강아지 나가려고 준비 중인데 그냥 갑자기 자랑하고 싶었음. 엄청 길게 써서 이게 말줄임이 적용이 되는지 확인을 해봐야 함 또 뭘 써야 하는 걸까 난 잘 모르겠지만 잠이 온다 하하하하 갈까 안자고 해야 할 거 같은데 ㅎㅎㅎ",
-            image: "/images/event1.png",
+            image: eventImg,
             // 아래 3개는 useState로 관리 예정
             commentCnt: 10,
             viewCnt: 10,
@@ -21,7 +41,7 @@ function Main() {
             id: 2,
             title: "반려동물 콘테스트에 나가는 사람",
             content: "지금 우리 강아지 나가려고 준비 중인데 그냥 갑자기 자랑하고 싶었음. 엄청 길게 써서 이게 말줄임이 적용이 되는지 확인을 해봐야 함 또 뭘 써야 하는 걸까 난 잘 모르겠지만 잠이 온다 하하하하 갈까 안자고 해야 할 거 같은데 ㅎㅎㅎ",
-            image: "/images/event1.png",
+            image: eventImg,
             // 아래 3개는 useState로 관리 예정
             commentCnt: 10,
             viewCnt: 10,
@@ -31,7 +51,7 @@ function Main() {
             id: 3,
             title: "반려동물 콘테스트에 나가는 사람",
             content: "지금 우리 강아지 나가려고 준비 중인데 그냥 갑자기 자랑하고 싶었음. 엄청 길게 써서 이게 말줄임이 적용이 되는지 확인을 해봐야 함 또 뭘 써야 하는 걸까 난 잘 모르겠지만 잠이 온다 하하하하 갈까 안자고 해야 할 거 같은데 ㅎㅎㅎ",
-            image: "/images/event1.png",
+            image: eventImg,
             // 아래 3개는 useState로 관리 예정
             commentCnt: 10,
             viewCnt: 10,
@@ -180,27 +200,67 @@ function Main() {
                         height:76,
                         borderRadius:'100%',
                         objectFit:'cover',
-
-                                            }} />
-                                        <Typography fontWeight={500} sx={{ fontSize: '22px' }}>{user.nickname}</Typography>
-                                    </Stack>)}
+                        }} />
+                    <Typography fontWeight={500} sx={{ fontSize: '22px' }}>{user.nickname}</Typography>
+                    </Stack>)}
+                    </Card>
+                </Stack>
+                {/* 내 반려동물 영역 */}
+                <Stack spacing={2} sx={{ mt:3 }}>
+                    <Card component={NavLink} to="/mypage" 
+                    sx={{
+                        p:3, // 카드 안에 내용 padding
+                        textDecoration:"none",
+                        borderRadius: 8
+                        }}
+                    >
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography variant="h6" fontWeight={600} 
+                        sx={{ mb: 2, 
+                        fontSize: '32px' }}>내 반려동물</Typography>
+                        <Typography sx={{ fontSize: '22px' }}>총 {pets.length}마리</Typography>
+                    </Stack>   
+                    {/* 반려동물 카드 Grid */}
+                    <Box sx={{
+                        mt:2, 
+                        display:"grid",
+                        gridTemplateColumns:"1fr 1fr",
+                        gap:2,
+                    }}>
+                        {pets.map((pet) =>(
+                            <Card 
+                            key={pet.petId}
+                            sx={{
+                                borderRadius:6,
+                                overflow:"hidden",
+                                boxShadow:"0 6px 16px rgba(0,0,0,0.8)",
+                            }}>
+                                <Box
+                                component="img"
+                                src={pet.imageUrl}
+                                alt={pet.name}
+                                sx={{
+                                    width:"100%",
+                                    height:140,
+                                    objectFit:"cover",
+                                }}
+                                />
+                                <Box sx={{p:2}}>
+                                    <Typography fontWeight={700}>
+                                        {pet.name}
+                                    </Typography>
+                                    <Typography variant="caption" color="text.secondary">
+                                    {pet.species} · {pet.gender}
+                                    </Typography>
+                                </Box>
                             </Card>
-                        </Stack>
-                        {/* 내 반려동물 영역 */}
-                        <Stack spacing={2} sx={{ p: 3 }}>
-                            <Typography 
-                            component={NavLink}
-                            to="/mypage"   
-                            variant="h6" fontWeight={600} 
-                            sx={{ 
-                                mb: 2, 
-                                fontSize: '32px',
-                                textDecoration:"none" 
-                                }}>내 반려동물</Typography>
-                        </Stack>
+                        ))}
                     </Box>
-                </Box>
-            </Stack>
+                    </Card>
+                </Stack>
+            </Box>
+        </Box>
+    </Stack>
     );
 }
 

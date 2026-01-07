@@ -5,12 +5,11 @@ import { NavLink } from 'react-router';
 
 // 이벤트 목록 호출 컴포넌트
 function EventTable(props) {
-    
     return (
-        <Box sx={{ maxWidth:1180, mx:'auto', width:'100%', py:4 }}>
+        <Box>
             {/* ------------------------ 이벤트 ------------------------- */}
                 <Typography variant="h6" component='h1' fontWeight={600} 
-                    sx={{ mb:2, fontSize: '32px'}}>이벤트</Typography>
+                    sx={{ mt:4, mb:4, fontSize: '32px'}}>이벤트</Typography>
                 {/* Event cards */}
                 <Grid 
                     direction='row' // 가로 배치
