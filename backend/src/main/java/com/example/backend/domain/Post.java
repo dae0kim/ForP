@@ -67,6 +67,11 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostImage> images = new ArrayList<>();
 
+    // 게시글 1 : 댓글 N
+    @Builder.Default
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostComment> comments = new ArrayList<>();
+
     @PrePersist
     public void preCount() {
         if(readCount == null) readCount = 0;
@@ -88,6 +93,10 @@ public class Post {
     public void addImage(PostImage image) {
         this.images.add(image);
         image.setPost(this);
+
+        if (this.imageUrl == null || this.imageUrl.isEmpty()) {
+            this.imageUrl = image.getImageUrl();
+        }
     }
 
 }

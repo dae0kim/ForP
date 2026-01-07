@@ -8,18 +8,16 @@ import { Box, Container } from "@mui/material";
 import { createPost } from "../../api/postsApi";
 import PostForm from "../../components/post/PostForm";
 
-export default function PostCreate() {
+function PostCreate() {
     const navigate = useNavigate();
     const qc = useQueryClient();
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [imageUrls, setImageUrls] = useState([]);
 
-    // Mutation
     const createMut = useMutation({
-        mutationFn: async () => {
-            return createPost({ title, content, imageUrls });
+        mutationFn: async (postData) => {
+            return createPost(postData);
         },
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ["posts"] });
@@ -31,6 +29,14 @@ export default function PostCreate() {
         },
     });
 
+    const handleSave = (urls) => {
+        createMut.mutate({
+            title,
+            content,
+            imageUrls: urls
+        });
+    };
+
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "#f8fafc", py: 5 }}>
             <Container maxWidth="md">
@@ -39,7 +45,7 @@ export default function PostCreate() {
                     mode="create"
                     title={title} setTitle={setTitle}
                     content={content} setContent={setContent}
-                    onSave={() => createMut.mutate()}
+                    onSave={handleSave}
                     isPending={createMut.isPending}
                     onCancel={() => navigate(-1)}
                 />
@@ -47,3 +53,5 @@ export default function PostCreate() {
         </Box>
     );
 }
+
+export default PostCreate;

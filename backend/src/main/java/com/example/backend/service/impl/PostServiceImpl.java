@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,20 +50,26 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDetailResponse createPost(Long memberId, PostCreateRequest request) {
         loginCheck(memberId);
-        User user = userRepository.findById(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "사용자 정보를 찾을 수 없습니다"));
-
+        User user = userRepository.findById(memberId).orElseThrow();
         Post post = request.toEntity(user);
-        Post savedPost = postRepository.save(post);
 
-        // 이미지 매핑 (Quill에서 선업로드된 PostImage들을 찾아 Post와 연결)
         if (request.getImageUrls() != null && !request.getImageUrls().isEmpty()) {
-            List<PostImage> postImages = postImageRepository.findByImageUrlIn(request.getImageUrls());
+            List<String> pureUrls = request.getImageUrls().stream()
+                    .map(url -> {
+                        if (url.contains("/images/")) {
+                            return url.substring(url.indexOf("/images/"));
+                        }
+                        return url;
+                    })
+                    .toList();
+
+            List<PostImage> postImages = postImageRepository.findByImageUrlIn(pureUrls);
             for (PostImage image : postImages) {
-                savedPost.addImage(image);
+                post.addImage(image);
             }
         }
 
+        Post savedPost = postRepository.save(post);
         return PostDetailResponse.from(savedPost);
     }
 
@@ -88,7 +95,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 글이 없습니다"));
 
-        post.increaseReadCount(); // @Transactional이라 dirty checking으로 반영됨
+        post.increaseReadCount();
 
         return PostDetailResponse.from(post);
     }
@@ -100,21 +107,18 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 글이 없습니다"));
 
-        if (!post.getUser().getId().equals(memberId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "수정 권한이 없습니다");
+        List<String> pureUrls = new ArrayList<>();
+        if (request.getImageUrls() != null) {
+            pureUrls = request.getImageUrls().stream()
+                    .map(url -> url.contains("/images/") ? url.substring(url.indexOf("/images/")) : url)
+                    .toList();
         }
 
-        // 대표 이미지 (리스트의 첫 번째)
-        String firstImageUrl = (request.getImageUrls() != null && !request.getImageUrls().isEmpty())
-                ? request.getImageUrls().get(0) : null;
-
-        // 기본 정보 업데이트
+        String firstImageUrl = !pureUrls.isEmpty() ? pureUrls.get(0) : null;
         post.update(request.getTitle(), request.getContent(), firstImageUrl);
 
-        // 이미지 연관관계 갱신
         if (request.getImageUrls() != null) {
-            // 기존 연결을 끊고 새로 들어온 URL들로 재매핑
-            List<PostImage> postImages = postImageRepository.findByImageUrlIn(request.getImageUrls());
+            List<PostImage> postImages = postImageRepository.findByImageUrlIn(pureUrls);
             post.getImages().clear();
             postImages.forEach(post::addImage);
         }
