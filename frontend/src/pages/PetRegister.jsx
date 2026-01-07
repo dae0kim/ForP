@@ -51,7 +51,16 @@ export default function PetRegister() {
     }, [form]);
 
     const onChange = (key) => (e) => {
-        const value = e.target.value;
+        let value = e.target.value;
+        if (key === "weight") {
+            value = value.replace(/[^0-9.]/g, "");
+            const parts = value.split(".");
+            if (parts.length > 2) return;
+            if (parts[1] && parts[1].length > 2) {
+                value = `${parts[0]}.${parts[1].slice(0, 2)}`;
+            }
+            if (Number(value) > 99.99) value = "99.99";
+        }
         setForm((prev) => ({
             ...prev,
             [key]: value,
@@ -79,6 +88,10 @@ export default function PetRegister() {
 
     const handleSubmit = async () => {
         if (!canSubmit) return;
+        if (Number(form.weight) < 0.1) {
+            alert("몸무게는 최소 0.1kg 이상이어야 합니다.");
+            return;
+        }
 
         try {
             const payload = {
@@ -177,7 +190,7 @@ export default function PetRegister() {
                                 placeholder="품종을 입력하세요"
                                 value={form.breed}
                                 onChange={onChange("breed")}
-                                inputProps={{ maxLength: 20 }}
+                                inputProps={{ maxLength: 10 }}
                             />
 
                             <Box>
