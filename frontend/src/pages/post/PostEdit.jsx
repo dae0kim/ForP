@@ -6,7 +6,7 @@ import { Box, Container, Typography, CircularProgress } from "@mui/material";
 import PostForm from "../../components/post/PostForm";
 import { fetchPostDetail, updatePost } from "../../api/postsApi";
 
-export default function PostEdit() {
+function PostEdit() {
     const navigate = useNavigate();
     const { postId } = useParams();
     const qc = useQueryClient();
@@ -34,7 +34,6 @@ export default function PostEdit() {
 
     useEffect(() => {
         if (post) {
-            // 본인 확인
             const postAuthorId = post?.author?.id ?? post?.authorId ?? post?.memberId ?? post?.userId ?? null;
             const isOwner = myId != null && postAuthorId != null && Number(myId) === Number(postAuthorId);
 
@@ -44,20 +43,19 @@ export default function PostEdit() {
                 return;
             }
 
-            // 데이터 세팅
             setTitle(post.title ?? "");
             setContent(post.content ?? "");
         }
     }, [post, myId, navigate, postId]);
 
-    // 수정 실행 Mutation
     const updateMut = useMutation({
-        mutationFn: async () => {
-            return updatePost(postId, { title, content });
+        mutationFn: async (postData) => {
+            return updatePost(postId, postData);
         },
         onSuccess: () => {
             alert("게시글 수정이 완료되었습니다.");
             qc.invalidateQueries({ queryKey: ["post", postId] });
+            qc.invalidateQueries({ queryKey: ["posts"] });
             navigate(`/posts/${postId}`);
         },
         onError: (e) => {
@@ -65,6 +63,14 @@ export default function PostEdit() {
             alert("수정 중 오류가 발생했습니다.");
         },
     });
+
+    const handleUpdate = (urls) => {
+        updateMut.mutate({
+            title,
+            content,
+            imageUrls: urls
+        });
+    };
 
     // 로딩 처리
     if (isLoading) {
@@ -95,7 +101,7 @@ export default function PostEdit() {
                     setTitle={setTitle}
                     content={content}
                     setContent={setContent}
-                    onSave={() => updateMut.mutate()}
+                    onSave={handleUpdate}
                     isPending={updateMut.isPending}
                     onCancel={() => navigate(`/posts/${postId}`)}
                 />
@@ -103,3 +109,5 @@ export default function PostEdit() {
         </Box>
     );
 }
+
+export default PostEdit;
