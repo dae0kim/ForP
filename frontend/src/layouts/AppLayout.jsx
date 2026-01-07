@@ -57,7 +57,7 @@ function AppLayout() {
             </AppBar>
 
             {/* 하단 화면 */}
-            <Container component="main" maxWidth='md' sx={{ pt: 12, mb: 4 }}>
+            <Container component="main" maxWidth='xl' sx={{ pt: 12, mb: 4 }}>
                 <Outlet />
             </Container>
         </Box>
