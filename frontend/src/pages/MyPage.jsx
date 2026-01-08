@@ -15,7 +15,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getMyPageMe, updateNickname, updateProfileImage } from "../api/mypageApi";
 import { getMyPets, deletePet } from "../api/petsApi";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
-import defaultProfile from "../assets/images/defaultImage.png";
 
 function MyPage() {
     const [user, setUser] = useState(() => {
@@ -26,7 +25,6 @@ function MyPage() {
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const getFullProfileImage = (url) => {
-        if (!url || url.trim() === "") return defaultProfile; // 기본 이미지 반환
         if (url.startsWith("http")) return url;
         return `${BASE_URL}${url}`;
     };
@@ -177,7 +175,7 @@ function MyPage() {
         <Stack>
             <Box>
                 <Container maxWidth={false} sx={{ width: 1450, py: 5, margin: "0 auto" }}>
-                    <Typography sx={{ fontSize: 32, fontWeight: 800, mb: 3 }}>
+                    <Typography sx={{ fontSize: 32, fontWeight: 600, mb: 3 }}>
                         마이페이지
                     </Typography>
 
