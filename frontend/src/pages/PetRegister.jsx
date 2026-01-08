@@ -134,7 +134,7 @@ export default function PetRegister() {
                             <Box
                                 sx={{
                                     width: 420,
-                                    height: 300,
+                                    height: 360,
                                     borderRadius: 4,
                                     bgcolor: "#E7F2FF",
                                     overflow: "hidden",
@@ -151,14 +151,14 @@ export default function PetRegister() {
                                         alt="preview"
                                         sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                 ) : (
-                                    <Typography sx={{ color: "text.secondary" }}>280x300 비율 권장</Typography>
+                                    <Typography sx={{ color: "text.secondary" }}>265x200 비율 권장</Typography>
                                 )}
                             </Box>
                             <Button component="label" variant="outlined" sx={{ mt: 2, borderRadius: 999, width: 420, height: 48, fontWeight: 800 }}>
                                 사진 선택
                                 <input hidden type="file" accept="image/jpeg,image/png" onChange={onPickImage} />
                             </Button>
-                            <Typography sx={{ mt: 1, color: "text.secondary", fontSize: 13, textAlign: "center" }}>
+                            <Typography sx={{ mt: 1, color: "text.secondary", fontSize: 13, textAlign: "r" }}>
                                 jpg/jpeg/png, 최대 5MB
                             </Typography>
                         </Box>

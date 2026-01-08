@@ -149,7 +149,7 @@ export default function PetEdit() {
                 <Card sx={{ borderRadius: 6, p: 5, boxShadow: "0 10px 30px rgba(0,0,0,0.08)" }}>
                     <Box sx={{ display: "grid", gridTemplateColumns: "420px 1fr", gap: 5, alignItems: "start" }}>
                         <Box>
-                            <Box sx={{ width: 420, height: 300, borderRadius: 4, bgcolor: "#E7F2FF", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <Box sx={{ width: 420, height: 360, borderRadius: 4, bgcolor: "#E7F2FF", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 {form.imagePreview ? (
                                     <Box component="img" src={getPetImageUrl(form.imagePreview)} sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                 ) : (
