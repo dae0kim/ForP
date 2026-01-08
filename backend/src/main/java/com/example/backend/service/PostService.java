@@ -13,12 +13,11 @@ import org.jspecify.annotations.Nullable;
 // 설계(규칙)
 public interface PostService {
 
-    // 게시글 작성 - 프론트에서 PostCreateRequest(제목, 내용, 이미지주소)를 받아서 저장 후 응답
-    // RequestDTO -> Entity 변환, Repository.save() 저장 -> 저장된 Entity -> Response DTD 변환
+    // 게시글 작성
     PostDetailResponse createPost(Long memberId, PostCreateRequest request);
 
     // 게시글 목록 조회 + 검색 + 페이징
-    PageResponse<PostListResponse> getPostList(int page, int size, String keyword);
+    PageResponse<PostListResponse> getPostList(int page, int size, String keyword, Boolean mine, Long memberId);
 
     // 게시글 상세 조회 + 조회수 증가
     PostDetailResponse getPostDetail(Long id);
