@@ -42,7 +42,7 @@ public class SecurityConfig {
 
                         // 게시글
                         .requestMatchers(HttpMethod.GET, "/api/posts/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/posts/**").authenticated() // 로그인한 사람만 접근할 수 있게끔
+                        .requestMatchers(HttpMethod.POST, "/api/posts/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/posts/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/posts/**").authenticated()
 
@@ -52,12 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/posts/*/comments/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/posts/*/comments/**").authenticated()
 
-                        // 이미지
-//                        .requestMatchers("/images/**").authenticated()
-
                         .anyRequest().authenticated()
-
-
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider),
                         org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);

@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardMedia, Stack, Typography, Avatar } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, Stack, Typography } from "@mui/material";
 import { Link, NavLink } from "react-router";
 import { eventList } from "../data/events";
 import { useEffect, useState } from "react";
@@ -54,14 +54,14 @@ function Main() {
                 {/* ------------------------ 이벤트 ------------------------- */}
                 <Box>
                     <Typography variant="h6" component='h1' fontWeight={600}
-                        sx={{ mt:4, mb: 4, fontSize: '30px' }}>이벤트</Typography>
+                        sx={{ mt: 4, mb: 4, fontSize: '30px' }}>이벤트</Typography>
                     {/* Event cards */}
                     <Stack
-                        direction='row' // 가로 배치
+                        direction='row'
                         spacing={2}
                         sx={{
-                            overflowX: 'auto', // 가로 스크롤 활성화
-                            pb: 1 // padding-bottom
+                            overflowX: 'auto',
+                            pb: 1
                         }}>
                         {eventList.map((event) => (
                             <Card
@@ -70,7 +70,7 @@ function Main() {
                                 to={`/events/${event.id}`}
                                 sx={{
                                     minWidth: 200,
-                                    minHeight:180,
+                                    minHeight: 180,
                                     textDecoration: "none",
                                     borderRadius: 8
                                 }}>
@@ -80,10 +80,10 @@ function Main() {
                                     sx={{ objectFit: 'contain' }}
                                 />
                                 <CardContent sx={{ p: 1.5 }}>
-                                    <Typography fontWeight={500} sx={{ fontSize:'23px',pb: 1.5 }}>
+                                    <Typography fontWeight={500} sx={{ fontSize: '23px', pb: 1.5 }}>
                                         {event.title}
                                     </Typography>
-                                    <Typography variant="body2" color="text.secondary" sx={{ fontSize:'18px'}}>
+                                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '18px' }}>
                                         {event.subTitle}
                                     </Typography>
                                 </CardContent>
@@ -115,16 +115,16 @@ function Main() {
             <Box sx={{
                 pl: 4,
                 width: 440,
-                flexShrink: 0, // 수축 지수 0으로 설정하여 화면이 좁아져도 무조건 width 너비 유지
+                flexShrink: 0,
             }}>
                 {/* 마이페이지 영역*/}
-                <Box sx={{ mt:4, backgroundColor: '#F7F8FC', p: 3, borderRadius: 8 }}>
+                <Box sx={{ mt: 4, backgroundColor: '#F7F8FC', p: 3, borderRadius: 8 }}>
                     <Stack spacing={2}>
                         <Card
                             component={NavLink}
                             to="/mypage"
                             sx={{
-                                p: 3, // 카드 안에 내용 padding
+                                p: 3,
                                 textDecoration: "none",
                                 borderRadius: 8
                             }}>
@@ -148,7 +148,7 @@ function Main() {
                     <Stack spacing={2} sx={{ mt: 3 }}>
                         <Card component={NavLink} to="/mypage"
                             sx={{
-                                p: 3, // 카드 안에 내용 padding
+                                p: 3,
                                 textDecoration: "none",
                                 borderRadius: 8
                             }}

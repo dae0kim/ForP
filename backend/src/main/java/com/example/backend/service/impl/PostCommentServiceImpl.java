@@ -43,7 +43,6 @@ public class PostCommentServiceImpl implements PostCommentService {
 
         List<PostComment> comments = postCommentRepository.findByPostOrderByRgstDateAsc(post);
 
-        // DTO 리스트로 변환
         return comments.stream().map(PostCommentResponse::from).toList();
     }
 
@@ -83,7 +82,7 @@ public class PostCommentServiceImpl implements PostCommentService {
 
         }
 
-        // 댓글 수정(엔티티가 담당하는)
+        // 댓글 수정
         comment.updateContent(request.getContent());
 
         // 수정된 내용으로 반환

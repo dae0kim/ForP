@@ -45,7 +45,7 @@ export const deletePet = async (petId) => {
 
 // 수정
 export const updatePet = async ({ petId, payload, imageFile }) => {
-    let imageUrl = payload.imageUrl; // 기존 유지
+    let imageUrl = payload.imageUrl;
 
     if (imageFile) {
         imageUrl = await uploadPetImage(imageFile);

@@ -9,7 +9,6 @@ function AppLayout() {
 
     useEffect(() => {
         const watchAuth = () => {
-            // 이미 로그인 페이지로 이동 중이라면 중단
             if (isRedirecting.current) return;
 
             const token = localStorage.getItem("accessToken");
@@ -19,7 +18,7 @@ function AppLayout() {
             const isLoginPage = window.location.pathname === "/" || window.location.pathname === "/auth/kakao";
 
             if (!isLoginPage && (!token || !user)) {
-                isRedirecting.current = true; // 플래그를 true로 설정하여 이후 호출 차단
+                isRedirecting.current = true;
 
                 localStorage.clear();
                 alert("인증 정보가 삭제되었습니다. 로그인 화면으로 이동합니다.");
@@ -61,7 +60,7 @@ function AppLayout() {
                                 textDecoration: 'none'
                             }}
                         >
-                            {/* 이미지 태그를 내부에 명시적으로 선언합니다 */}
+                            {/* 로고 */}
                             <img
                                 src={LogoImage}
                                 alt="ポーピー 로고"

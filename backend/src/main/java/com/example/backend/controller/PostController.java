@@ -21,7 +21,7 @@ public class PostController {
 
     private final PostService postService;
 
-    // 게시글 등록 (회원만)
+    // 게시글 등록
     @PostMapping
     public ResponseEntity<PostDetailResponse> create(
             @Valid @RequestBody PostCreateRequest request,
@@ -48,7 +48,7 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostDetail(id));
     }
 
-    // 게시글 수정 (회원만)
+    // 게시글 수정
     @PutMapping("/{id}")
     public ResponseEntity<PostDetailResponse> update(
             @PathVariable Long id,
@@ -58,7 +58,7 @@ public class PostController {
         return ResponseEntity.ok(postService.updatePost(memberId, id, request));
     }
 
-    // 게시글 삭제 (회원만)
+    // 게시글 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id,

@@ -36,7 +36,6 @@ public class UserMyPageServiceImpl implements UserMyPageService {
 
         user.updateNickname(nickname);
 
-        // dirty checking으로 DB 반영
         return UserMyPageResponse.from(user);
     }
 
@@ -47,13 +46,13 @@ public class UserMyPageServiceImpl implements UserMyPageService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
 
-        // 1. 기존 이미지 삭제 (외부 URL인 경우 제외)
+        // 기존 이미지 삭제 (외부 URL인 경우 제외)
         String oldImageUrl = user.getProfileImage();
-        if (oldImageUrl != null && !oldImageUrl.startsWith("http")) { // http로 시작하지 않을 때만 삭제 실행
+        if (oldImageUrl != null && !oldImageUrl.startsWith("http")) {
             fileService.deleteImage(oldImageUrl);
         }
 
-        // 2. 새 이미지 저장 로직...
+        // 새 이미지 저장
         String newImageUrl = fileService.saveImage(image);
         user.updateProfileImage(newImageUrl);
 

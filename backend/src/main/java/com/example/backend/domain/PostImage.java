@@ -28,7 +28,7 @@ public class PostImage {
     @Column(name = "image_url", nullable = false, length = 1000)
     private String imageUrl;
 
-    @Column(name = "image_name")
+    @Column(name = "image_name", length = 500)
     private String imageName;
 
     public void setPost(Post post) {

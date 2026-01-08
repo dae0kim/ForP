@@ -17,7 +17,7 @@ public class MemberResponse {
 
     // entity -> 작성자 dto
     public static MemberResponse from(User user) {
-        if(user == null) return null; // 탈퇴 멤버 확인
+        if(user == null) return null;
 
         return MemberResponse.builder()
                 .id(user.getId())

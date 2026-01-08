@@ -18,7 +18,7 @@ public class PostCreateRequest {
 
     @NotBlank(message = "제목 필수")
     @Size(max = 200, message = "제목은 200자 이내로 작성하세요")
-    private String title; // 이건 id로
+    private String title;
 
     @NotBlank(message = "내용 필수")
     private String content;
