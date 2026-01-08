@@ -76,17 +76,34 @@ public class PostServiceImpl implements PostService {
     // 게시글 목록 조회 + 검색 + 페이징
     @Transactional(readOnly = true)
     @Override
-    public PageResponse<PostListResponse> getPostList(int page, int size, String keyword) {
+    public PageResponse<PostListResponse> getPostList(int page, int size, String keyword, Boolean mine, Long memberId) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Post> postPage = findPostPage(keyword, pageable);
+        Long filterMemberId = (mine && memberId != null) ? memberId : null;
+        Page<Post> postPage = findPostPage(keyword, filterMemberId, pageable);
         return PageResponse.from(postPage, PostListResponse::from);
     }
 
-    private Page<Post> findPostPage(String keyword, Pageable pageable) {
-        if (keyword == null || keyword.isBlank()) {
-            return postRepository.findAll(pageable);
+    private Page<Post> findPostPage(String keyword, Long memberId, Pageable pageable) {
+        boolean hasKeyword = (keyword != null && !keyword.isBlank());
+        boolean hasMemberFilter = (memberId != null);
+
+        // 내 글 보기 + 제목 검색
+        if (hasKeyword && hasMemberFilter) {
+            return postRepository.findByUserIdAndTitleContainingIgnoreCase(memberId, keyword, pageable);
         }
-        return postRepository.findByTitleContainingIgnoreCaseOrContentContaining(keyword, keyword, pageable);
+
+        // 전체 글 + 제목 검색
+        if (hasKeyword) {
+            return postRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+        }
+
+        // 내 글 보기
+        if (hasMemberFilter) {
+            return postRepository.findByUserId(memberId, pageable);
+        }
+
+        // 전체 보기
+        return postRepository.findAll(pageable);
     }
 
     // 게시글 상세 조회 + 조회수 증가

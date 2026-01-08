@@ -4,40 +4,40 @@ import { Box, Paper, InputBase, Button } from "@mui/material";
 function PostSearch({ keyword, setKeyword, onlyMine, setOnlyMine, onSearch }) {
     return (
         <Box
-            sx={{ 
-                position: "relative", // 버튼 배치를 위한 기준점
-                display: "flex", 
-                flexDirection: "column", // 세로 배치로 변경
-                alignItems: "center", 
-                mb: 4 
+            sx={{
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                mb: 4
             }}
         >
             {/* 검색바 */}
             <Box
                 component="form"
                 onSubmit={onSearch}
-                sx={{ 
-                    display: "flex", 
-                    justifyContent: "center", 
-                    width: "100%" 
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "100%"
                 }}
             >
                 <Paper
                     elevation={0}
                     sx={{
-                        p: "6px 18px", 
-                        display: "flex", 
-                        alignItems: "center", 
+                        p: "6px 18px",
+                        display: "flex",
+                        alignItems: "center",
                         width: "100%",
-                        maxWidth: 500, 
-                        borderRadius: "999px", 
+                        maxWidth: 500,
+                        borderRadius: "999px",
                         bgcolor: "#cfeaff",
                         boxShadow: "0 8px 18px rgba(0, 0, 0, 0.06)",
                     }}
                 >
                     <InputBase
-                        sx={{ ml: 1, flex: 1, fontSize: "20px" }} 
-                        placeholder="검색어를 입력하세요."
+                        sx={{ ml: 1, flex: 1, fontSize: "20px" }}
+                        placeholder="제목으로 검색하세요."
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
                     />
@@ -50,13 +50,13 @@ function PostSearch({ keyword, setKeyword, onlyMine, setOnlyMine, onSearch }) {
                 onClick={() => setOnlyMine(!onlyMine)}
                 sx={{
                     position: "absolute",
-                    right: 0, // 부모 Box의 맨 우측
+                    right: 0,
                     bottom: -20, // 검색바 아래, 게시글 목록 바로 위로 배치
-                    borderRadius: "10px", // 사진과 유사한 각진 둥근 형태
-                    bgcolor: "white", 
+                    borderRadius: "10px",
+                    bgcolor: "white",
                     color: "#1f2a37",
-                    borderColor: "#eee", 
-                    fontSize: "20px", 
+                    borderColor: "#eee",
+                    fontSize: "20px",
                     px: 1.5,
                     py: 0.5,
                     whiteSpace: "nowrap",
