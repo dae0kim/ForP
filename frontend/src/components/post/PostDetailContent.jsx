@@ -7,7 +7,7 @@ function PostDetailContent({ content }) {
             <div className="ql-snow">
                 <div
                     className="ql-editor"
-                    style={{ padding: 0, fontSize: "16px", lineHeight: 1.8, color: "#334155" }}
+                    style={{ padding: 0, fontSize: "20px", lineHeight: 1.8, color: "#334155" }}
                     dangerouslySetInnerHTML={{ __html: content ?? "" }}
                 />
             </div>
