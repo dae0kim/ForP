@@ -37,7 +37,7 @@ function MbtiEvt() {
 
   return (
     <Box sx={{ maxWidth: 1180, mx: 'auto', py: 6 }}>
-      <Typography fontWeight={700} sx={{ fontSize: 32, mb: 3 }}>
+      <Typography fontWeight={600} sx={{ fontSize: 30, mb: 3 }}>
         이벤트
       </Typography>
       <Typography fontWeight={600} textAlign="center" sx={{ fontSize: 27, mb: 3 }}>
@@ -47,7 +47,7 @@ function MbtiEvt() {
       <Paper sx={{ p: 5, borderRadius: 8, textAlign: 'center' }}>
         {!isFinished ? (
           <>
-            <Typography fontWeight={600} sx={{ fontSize: 24, mb: 4 }}>
+            <Typography fontWeight={500} sx={{ fontSize: 24, mb: 4 }}>
               Q{step + 1}. {questions[step].question}
             </Typography>
 
@@ -60,7 +60,7 @@ function MbtiEvt() {
                   sx={{
                     py: 2,
                     borderRadius: 3,
-                    fontSize: 16,
+                    fontSize: '20px',
                     backgroundColor: '#C2E7FE',
                     color: '#000',
                     '&:hover': { backgroundColor: '#549BD3' },
@@ -73,10 +73,10 @@ function MbtiEvt() {
           </>
         ) : (
           <>
-            <Typography fontWeight={700} sx={{ fontSize: 28, mb: 2 }}>
+            <Typography fontWeight={600} sx={{ fontSize: 28, mb: 2 }}>
               당신의 MBTI는 {mbti}
             </Typography>
-            <Typography sx={{ fontSize: 18 }}>
+            <Typography sx={{ fontSize: '22px' }}>
               어울리는 반려동물은 <b>{mbtiMap[mbti]}</b> 입니다 🐾
             </Typography>
           </>

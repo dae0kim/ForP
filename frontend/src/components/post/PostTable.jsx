@@ -12,7 +12,7 @@ function PostTable({ items, isLoading, isError, isMobile }) {
             elevation={0}
             sx={{ borderRadius: "10px", border: "1px solid #cfe6ff", bgcolor: "#eef7ff", overflow: "hidden" }}
         >
-            <Table size="small">
+            <Table size="medium">
                 <TableBody>
                     {isLoading ? (
                         <TableRow><TableCell colSpan={5} align="center" sx={{ py: 5, color: "#64748b" }}>불러오는 중...</TableCell></TableRow>
@@ -35,17 +35,17 @@ function PostTable({ items, isLoading, isError, isMobile }) {
                                 >
                                     <TableCell align="center" sx={{ width: 60, color: "#334155" }}>{id}</TableCell>
                                     <TableCell>
-                                        <Typography sx={{ fontSize: "14px", fontWeight: 500, color: "#1f2a37" }}>
+                                        <Typography sx={{ fontSize: "20px", fontWeight: 500, color: "#1f2a37" }}>
                                             {p.title ?? "(제목 없음)"}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ width: 120, color: "#334155" }}>
+                                    <TableCell align="center" sx={{ fontSize: "16px", width: 120, color: "#334155" }}>
                                         {p.author?.nickname ?? p.writer ?? "-"}
                                     </TableCell>
-                                    <TableCell align="center" sx={{ width: 110, color: "#334155" }}>
+                                    <TableCell align="center" sx={{ fontSize: "16px", width: 110, color: "#334155" }}>
                                         {(p.rgstDate ?? "").toString().slice(0, 10)}
                                     </TableCell>
-                                    <TableCell align="center" sx={{ width: 90, color: "#334155" }}>
+                                    <TableCell align="center" sx={{ fontSize: "16px", width: 90, color: "#334155" }}>
                                         {Number(p.readCount ?? 0).toLocaleString()}
                                     </TableCell>
                                 </TableRow>

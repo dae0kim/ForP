@@ -81,7 +81,7 @@ function PostForm({
 
     return (
         <Paper sx={{ borderRadius: "26px", p: { xs: 3, md: 4 }, boxShadow: "0 10px 24px rgba(0, 0, 0, 0.08)", border: "1px solid rgba(0, 0, 0, 0.05)" }}>
-            <Typography sx={{ mb: 3, fontSize: "32px", fontWeight: 700, color: "#0f172a" }}>
+            <Typography sx={{ mb: 3, fontSize: "30px", fontWeight: 600, color: "#0f172a" }}>
                 {mode === "create" ? "새 글 등록" : "글 수정"}
             </Typography>
 
@@ -112,8 +112,8 @@ function PostForm({
                         borderRadius: "10px", 
                         bgcolor: "#d9e9f7", 
                         color: "#000", 
-                        fontWeight: 700, 
-                        fontSize:"20px",
+                        fontWeight: 600, 
+                        fontSize:"15px",
                         boxShadow: "none", 
                         "&:hover": { bgcolor: "#cbdff0", boxShadow: "none" } }}
                     >
@@ -128,8 +128,8 @@ function PostForm({
                         borderRadius: "10px", 
                         bgcolor: "#8fc9f0", 
                         color: "#000", 
-                        fontSize:"20px",
-                        fontWeight: 700, 
+                        fontSize:"15px",
+                        fontWeight: 500, 
                         boxShadow: "none", 
                         "&:hover": { bgcolor: "#7ab8e0", boxShadow: "none" } }}
                     >

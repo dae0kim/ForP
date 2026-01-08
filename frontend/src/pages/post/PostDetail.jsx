@@ -94,9 +94,9 @@ export default function PostDetail() {
     }
 
     return (
-        <Box sx={{ minHeight: "100vh", bgcolor: "#f1f5f9", py: 5 }}>
+        <Box sx={{ minHeight: "100vh",py: 5 }}>
             <Container maxWidth="md">
-                <Typography sx={{ mb: 3, fontSize: "24px", fontWeight: 900, color: "#1e293b" }}>
+                <Typography sx={{ mb: 4, fontSize: "30px", fontWeight: 600, color: "#1e293b" }}>
                     자유게시판
                 </Typography>
 

@@ -24,5 +24,23 @@ export const eventList = [
         title: "이벤트 제목",
         subTitle: "이벤트 부제",
         image: eventImg
-    }
+    },
+    {
+        id: 5,
+        title: "이벤트 제목",
+        subTitle: "이벤트 부제",
+        image: eventImg
+    },
+    // {
+    //     id: 6,
+    //     title: "이벤트 제목",
+    //     subTitle: "이벤트 부제",
+    //     image: eventImg
+    // },
+    // {
+    //     id: 7,
+    //     title: "이벤트 제목",
+    //     subTitle: "이벤트 부제",
+    //     image: eventImg
+    // },
 ];

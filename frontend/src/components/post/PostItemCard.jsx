@@ -54,7 +54,7 @@ function PostItemCard({ post }) {
 
             {/* 오른쪽 텍스트 영역 */}
             <Box sx={{ flex: 1 }}>
-                <Typography fontWeight={600} sx={{ mb: 1, pb: 1, color: '#1f2a37' }}>
+                <Typography fontWeight={600} sx={{ mb: 1, pb: 1, fontSize:'22px', color: '#1f2a37' }}>
                     {post.title}
                 </Typography>
                 <Typography
@@ -67,7 +67,8 @@ function PostItemCard({ post }) {
                         display: "-webkit-box",
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: "vertical",
-                        minHeight: '40px'
+                        minHeight: '40px',
+                        fontSize: '20px'
                     }}
                 >
                     {removeHtmlTags(post.content)}
@@ -75,13 +76,13 @@ function PostItemCard({ post }) {
 
                 {/* 하단 메타 정보 */}
                 <Stack direction="row" spacing={2} alignItems="center">
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography variant="caption" color="text.secondary" sx={{fontSize: '18px'}}>
                         💬 {post.commentCount || 0}
                     </Typography>
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography variant="caption" color="text.secondary" sx={{fontSize: '18px'}}>
                         👁 {post.readCount || 0}
                     </Typography>
-                    <Typography variant="caption" color="text.secondary" sx={{ ml: 'auto !important' }}>
+                    <Typography variant="caption" color="text.secondary" sx={{ ml: 'auto !important', p:1.5, fontSize: '18px' }}>
                         {formatDate(post.rgstDate)}
                     </Typography>
                 </Stack>
