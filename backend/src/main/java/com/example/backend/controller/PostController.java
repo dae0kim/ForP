@@ -31,14 +31,15 @@ public class PostController {
     }
 
     // 게시글 목록 조회 + 페이징 + 검색
-    // GET /api/posts?page=0&size=10&keyword=검색어
     @GetMapping
     public ResponseEntity<PageResponse<PostListResponse>> list(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
-            @RequestParam(required = false) String keyword
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "false") boolean mine,
+            @AuthenticationPrincipal Long memberId
     ) {
-        return ResponseEntity.ok(postService.getPostList(page, size, keyword));
+        return ResponseEntity.ok(postService.getPostList(page, size, keyword, mine, memberId));
     }
 
     // 게시글 상세 조회 + 조회수 증가
