@@ -1,8 +1,42 @@
 import { Box, Container, Stack, Button, AppBar, Toolbar, Typography } from '@mui/material';
 import { Link, NavLink, Outlet } from 'react-router';
 import LogoImage from '../assets/images/logo_image.png';
+import { useEffect, useRef } from 'react';
 
 function AppLayout() {
+
+    const isRedirecting = useRef(false);
+
+    useEffect(() => {
+        const watchAuth = () => {
+            // 이미 로그인 페이지로 이동 중이라면 중단
+            if (isRedirecting.current) return;
+
+            const token = localStorage.getItem("accessToken");
+            const user = localStorage.getItem("loginUser");
+
+            // 로그인/리다이렉트 중인 페이지는 감시 제외
+            const isLoginPage = window.location.pathname === "/" || window.location.pathname === "/auth/kakao";
+
+            if (!isLoginPage && (!token || !user)) {
+                isRedirecting.current = true; // 플래그를 true로 설정하여 이후 호출 차단
+
+                localStorage.clear();
+                alert("인증 정보가 삭제되었습니다. 로그인 화면으로 이동합니다.");
+                window.location.href = "/";
+            }
+        };
+
+        const interval = setInterval(watchAuth, 500);
+        window.addEventListener("storage", watchAuth);
+
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener("storage", watchAuth);
+        };
+    }, []);
+
+
     const handleLogout = () => {
         localStorage.clear();
         window.location.href = "/"; // ok
