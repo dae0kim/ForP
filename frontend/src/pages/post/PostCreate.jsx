@@ -38,7 +38,7 @@ function PostCreate() {
     };
 
     return (
-        <Box sx={{ minHeight: "100vh", bgcolor: "#f8fafc", py: 5 }}>
+        <Box sx={{ minHeight: "100vh", py: 5 }}>
             <Container maxWidth="md">
                 {/* 글 작성,수정 컴포넌트 */}
                 <PostForm
