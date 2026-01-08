@@ -1,0 +1,208 @@
+import { Box, Card, CardContent, CardMedia, Stack, Typography } from "@mui/material";
+import { Link, NavLink } from "react-router";
+import { eventList } from "../data/events";
+import { useEffect, useState } from "react";
+import { getMyPets } from "../api/petsApi";
+import PostItemCard from "../components/post/PostItemCard";
+import { useQuery } from "@tanstack/react-query";
+import { fetchMainLatestPosts } from "../api/postsApi";
+
+function Main() {
+    const user = JSON.parse(localStorage.getItem("loginUser"));
+
+    const [pets, setPets] = useState([]);
+
+    // 게시글 데이터
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ["mainLatestPosts"],
+        queryFn: fetchMainLatestPosts,
+    });
+    const posts = data?.content || [];
+
+    // 반려동물 데이터 로딩 로직
+    useEffect(() => {
+        const loadPets = async () => {
+            try {
+                const list = await getMyPets();
+                setPets(list || []); // 가져온 데이터를 상태에 저장
+            } catch (e) {
+                console.error("반려동물 로딩 실패:", e);
+            }
+        };
+        loadPets();
+    }, []);
+
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    // 프로필 사진
+    const getFullProfileImage = (url) => {
+        if (url.startsWith("http")) return url;
+        return `${BASE_URL}${url}`;
+    };
+
+    // 반려동물 사진
+    const getPetImageUrl = (path) => {
+        if (!path) return "";
+        if (path.startsWith("blob:")) return path;
+        return `${BASE_URL}${path}`;
+    };
+
+    return (
+        <Stack direction="row" justifyContent="center">
+            {/*================================ Left Area ========================================= */}
+            <Box sx={{ flex: 1, width: '100%' }}>
+                {/* ------------------------ 이벤트 ------------------------- */}
+                <Box>
+                    <Typography variant="h6" component='h1' fontWeight={600}
+                        sx={{ mt: 4, mb: 4, fontSize: '30px' }}>이벤트</Typography>
+                    {/* Event cards */}
+                    <Stack
+                        direction='row'
+                        spacing={2}
+                        sx={{
+                            overflowX: 'auto',
+                            pb: 1
+                        }}>
+                        {eventList.map((event) => (
+                            <Card
+                                key={event.id}
+                                component={Link}
+                                to={`/events/${event.id}`}
+                                sx={{
+                                    minWidth: 200,
+                                    minHeight: 180,
+                                    textDecoration: "none",
+                                    borderRadius: 8
+                                }}>
+                                <CardMedia component="img"
+                                    height="120"
+                                    image={event.image}
+                                    sx={{ objectFit: 'contain' }}
+                                />
+                                <CardContent sx={{ p: 1.5 }}>
+                                    <Typography fontWeight={500} sx={{ fontSize: '23px', pb: 1.5 }}>
+                                        {event.title}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '18px' }}>
+                                        {event.subTitle}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </Stack>
+                </Box>
+                {/* ------------------------ 자유 게시판 ------------------------- */}
+                <Box>
+                    <Typography variant="h6" sx={{ mb: 4, mt: 4, fontSize: '30px', fontWeight: 600 }}>
+                        자유 게시판
+                    </Typography>
+                    <Stack direction="column" spacing={2} sx={{ pb: 2 }}>
+                        {isLoading ? (
+                            <Typography sx={{ p: 2 }}>게시글을 불러오는 중입니다...</Typography>
+                        ) : isError ? (
+                            <Typography sx={{ p: 2, color: 'error.main' }}>게시글 로딩에 실패했습니다.</Typography>
+                        ) : posts.length > 0 ? (
+                            posts.map((post) => (
+                                <PostItemCard key={post.id} post={post} />
+                            ))
+                        ) : (
+                            <Typography sx={{ p: 2 }}>등록된 게시글이 없습니다.</Typography>
+                        )}
+                    </Stack>
+                </Box>
+            </Box>
+            {/*================================ Right Area ========================================= */}
+            <Box sx={{
+                pl: 4,
+                width: 440,
+                flexShrink: 0,
+            }}>
+                {/* 마이페이지 영역*/}
+                <Box sx={{ mt: 4, backgroundColor: '#F7F8FC', p: 3, borderRadius: 8 }}>
+                    <Stack spacing={2}>
+                        <Card
+                            component={NavLink}
+                            to="/mypage"
+                            sx={{
+                                p: 3,
+                                textDecoration: "none",
+                                borderRadius: 8
+                            }}>
+                            <Typography variant="h6" component='h1' fontWeight={600} sx={{ mb: 2, fontSize: '30px' }}>마이페이지</Typography>
+                            {user && (
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    <CardMedia
+                                        component="img"
+                                        image={getFullProfileImage(user.profileImage)}
+                                        sx={{
+                                            width: 76,
+                                            height: 76,
+                                            borderRadius: '100%',
+                                            objectFit: 'cover',
+                                        }} />
+                                    <Typography fontWeight={500} sx={{ fontSize: '22px' }}>{user.nickname}</Typography>
+                                </Stack>)}
+                        </Card>
+                    </Stack>
+                    {/* 내 반려동물 영역 */}
+                    <Stack spacing={2} sx={{ mt: 3 }}>
+                        <Card component={NavLink} to="/mypage"
+                            sx={{
+                                p: 3,
+                                textDecoration: "none",
+                                borderRadius: 8
+                            }}
+                        >
+                            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                                <Typography variant="h6" fontWeight={600}
+                                    sx={{
+                                        mb: 2,
+                                        fontSize: '30px'
+                                    }}>내 반려동물</Typography>
+                                <Typography sx={{ fontSize: '22px' }}>총 {pets.length}마리</Typography>
+                            </Stack>
+                            {/* 반려동물 카드 Grid */}
+                            <Box sx={{
+                                mt: 2,
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr",
+                                gap: 2,
+                            }}>
+                                {pets.map((pet) => (
+                                    <Card
+                                        key={pet.petId}
+                                        sx={{
+                                            borderRadius: 6,
+                                            overflow: "hidden",
+                                            boxShadow: "0 6px 16px rgba(0,0,0,0.8)",
+                                        }}>
+                                        <Box
+                                            component="img"
+                                            src={getPetImageUrl(pet.imageUrl)}
+                                            alt={pet.name}
+                                            sx={{
+                                                width: "100%",
+                                                height: 140,
+                                                objectFit: "cover",
+                                            }}
+                                        />
+                                        <Box sx={{ p: 2 }}>
+                                            <Typography fontWeight={600}>
+                                                {pet.name}
+                                            </Typography>
+                                            <Typography variant="caption" color="text.secondary">
+                                                {pet.species} · {pet.breed || "품종 없음"} · {pet.gender}
+                                            </Typography>
+                                        </Box>
+                                    </Card>
+                                ))}
+                            </Box>
+                        </Card>
+                    </Stack>
+                </Box>
+            </Box>
+        </Stack>
+    );
+}
+
+export default Main;
