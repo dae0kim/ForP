@@ -40,7 +40,6 @@ function PostComments({ postId, myId }) {
         });
     }, [data]);
 
-    // Mutation 로직 (동일하여 생략 가능하지만 구조 유지)
     const createMut = useMutation({
         mutationFn: (content) => createComment(postId, content),
         onSuccess: async () => {
@@ -79,7 +78,7 @@ function PostComments({ postId, myId }) {
                 댓글 {comments.length}
             </Typography>
 
-            {/* 입력 폼 (기존과 동일) */}
+            {/* 입력 폼 */}
             <Box component="form" onSubmit={onSubmitComment} sx={{ mb: 5 }}>
                 <Box sx={{ display: "flex", gap: 1.5 }}>
                     <TextField
@@ -123,11 +122,11 @@ function PostComments({ postId, myId }) {
                     const rgstTime = c.rgstDate ? new Date(c.rgstDate).getTime() : 0;
                     const updtTime = c.updtDate ? new Date(c.updtDate).getTime() : 0;
 
-                    // 화면 표시용 포맷팅
+                    // 포맷팅
                     const rgstDateFmt = fmtDate(c.rgstDate);
                     const updtDateFmt = fmtDate(c.updtDate);
 
-                    // 수정 여부 판단 (1초 이상의 유의미한 차이가 있을 때만 수정으로 간주)
+                    // 수정 여부 판단
                     const isEdited = updtTime > 0 && rgstTime > 0 && Math.abs(updtTime - rgstTime) > 1000;
 
                     return (

@@ -20,12 +20,12 @@ public class PostCommentController {
     private final PostCommentService postCommentService;
 
     // 댓글 조회
-    @GetMapping // 조회는 GET
+    @GetMapping
     public ResponseEntity<List<PostCommentResponse>> getComments(@PathVariable Long postId) {
         return ResponseEntity.ok(postCommentService.getComments(postId));
     }
 
-    // 댓글 작성 (회원만)
+    // 댓글 작성
     @PostMapping
     public ResponseEntity<PostCommentResponse> create(
             @PathVariable Long postId,
@@ -35,7 +35,7 @@ public class PostCommentController {
         return ResponseEntity.ok(postCommentService.create(memberId, postId, request));
     }
 
-    // 댓글 수정 (회원만)
+    // 댓글 수정
     @PutMapping("/{commentId}")
     public ResponseEntity<PostCommentResponse> update(
             @PathVariable Long commentId,
@@ -46,7 +46,7 @@ public class PostCommentController {
         return ResponseEntity.ok(response);
     }
 
-    // 댓글 삭제 (회원만)
+    // 댓글 삭제
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> delete(
             @PathVariable Long commentId,

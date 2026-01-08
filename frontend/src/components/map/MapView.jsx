@@ -19,14 +19,14 @@ function MapView() {
         }
     };
 
-    // 검색 로직
+    // 검색
     const searchPlaces = (searchKeyword, map) => {
-        if (!map) return; // 지도 객체가 없으면 리턴
+        if (!map) return;
 
         const { kakao } = window;
         const ps = new kakao.maps.services.Places();
 
-        // [추가] 간헐적 마킹 누락 방지: 영역 정보(Bounds)가 없으면 0.1초 뒤 재시도
+        // 간헐적 마킹 누락 방지
         const bounds = map.getBounds();
         if (!bounds) {
             setTimeout(() => searchPlaces(searchKeyword, map), 100);
@@ -103,10 +103,9 @@ function MapView() {
                         const locPosition = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
                         map.setCenter(locPosition);
 
-                        // tilesloaded 이벤트를 사용하여 지도가 준비된 후 검색 실행
+                        // 지도가 준비된 후 검색 실행
                         const handleInitialSearch = () => {
                             searchPlaces("동물병원", map);
-                            // 실행 후 리스너 제거 (addListenerOnce의 수동 구현)
                             kakao.maps.event.removeListener(map, 'tilesloaded', handleInitialSearch);
                         };
 
@@ -130,7 +129,7 @@ function MapView() {
 
         if (!keyword.trim()) return alert("키워드를 입력해주세요!");
 
-        // 기존 searchPlaces 함수를 재사용하여 마커 생성 로직 중복 제거
+        // 마커 생성 로직 중복 제거
         searchPlaces(keyword, mapInstance.current);
     };
 

@@ -117,7 +117,7 @@ public class PostServiceImpl implements PostService {
         return PostDetailResponse.from(post);
     }
 
-    // 게시글 수정 (회원만)
+    // 게시글 수정
     @Override
     public PostDetailResponse updatePost(Long memberId, Long id, @Valid PostUpdateRequest request) {
         loginCheck(memberId);

@@ -54,7 +54,7 @@ public class Pet {
     private BigDecimal weight;
 
     // 이미지
-    @Column(name = "image_url", length = 500, nullable = false)
+    @Column(name = "image_url", length = 1000, nullable = false)
     private String imageUrl;
 
     // 등록일

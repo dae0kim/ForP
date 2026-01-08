@@ -62,7 +62,7 @@ public class FileService {
         if(imageUrl == null || imageUrl.isBlank()) return;
 
         // "/images/파일명" -> 파일명
-        String fileName = imageUrl.replace("/images/", ""); // 앞에 있는걸 뒤에있는걸로 바꾸겠다?
+        String fileName = imageUrl.replace("/images/", "");
 
         Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
         Path target = uploadPath.resolve(fileName).normalize();

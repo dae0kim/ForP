@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             try {
-                // 토큰에서 유저 ID 추출 (getUserId 활용)
+                // 토큰에서 유저 ID 추출
                 Long userId = jwtProvider.getUserId(token);
 
                 // Security 권한 부여

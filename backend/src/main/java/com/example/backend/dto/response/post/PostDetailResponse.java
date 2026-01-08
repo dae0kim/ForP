@@ -21,7 +21,7 @@ public class PostDetailResponse {
     private String title;
     private String content;
     private String imageUrl;
-    private MemberResponse author; // 작성자(id, nickname)
+    private MemberResponse author;
     private Integer readCount;
     private LocalDateTime rgstDate;
     private LocalDateTime updtDate;

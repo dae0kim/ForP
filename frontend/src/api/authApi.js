@@ -10,15 +10,7 @@ export const kakaoLogin = async (code) => {
 };
 
 // 내 정보 조회
-export const getMe = async (token) => {
-    // const response = await axios.get(
-    //     `${API_BASE_URL}/auth/me`,
-    //     {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`,
-    //         },
-    //     }
-    // );
+export const getMe = async () => {
     const response = await api.get("/api/auth/me");
     return response.data; // User 객체
 };

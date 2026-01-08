@@ -51,7 +51,7 @@ function PostSearch({ keyword, setKeyword, onlyMine, setOnlyMine, onSearch }) {
                 sx={{
                     position: "absolute",
                     right: 0,
-                    bottom: -20, // 검색바 아래, 게시글 목록 바로 위로 배치
+                    bottom: -20,
                     borderRadius: "10px",
                     bgcolor: "white",
                     color: "#1f2a37",
