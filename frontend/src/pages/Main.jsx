@@ -52,11 +52,11 @@ function Main() {
     return (
         <Stack direction="row" justifyContent="center">
             {/*================================ Left Area ========================================= */}
-            <Box sx={{ flex: 1 }}>
+            <Box sx={{ flex: 1, width: '100%' }}>
                 {/* ------------------------ 이벤트 ------------------------- */}
                 <Box>
                     <Typography variant="h6" component='h1' fontWeight={600}
-                        sx={{ mb: 2, fontSize: '32px' }}>이벤트</Typography>
+                        sx={{ mt:4, mb: 4, fontSize: '32px' }}>이벤트</Typography>
                     {/* Event cards */}
                     <Stack
                         direction='row' // 가로 배치
@@ -72,6 +72,7 @@ function Main() {
                                 to={`/events/${event.id}`}
                                 sx={{
                                     minWidth: 200,
+                                    minHeight:180,
                                     textDecoration: "none",
                                     borderRadius: 8
                                 }}>
@@ -81,10 +82,10 @@ function Main() {
                                     sx={{ objectFit: 'contain' }}
                                 />
                                 <CardContent sx={{ p: 1.5 }}>
-                                    <Typography fontWeight={600} sx={{ pb: 1.5 }}>
+                                    <Typography fontWeight={600} sx={{ fontSize:'23px',pb: 1.5 }}>
                                         {event.title}
                                     </Typography>
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" color="text.secondary" sx={{ fontSize:'18px'}}>
                                         {event.subTitle}
                                     </Typography>
                                 </CardContent>
@@ -94,7 +95,7 @@ function Main() {
                 </Box>
                 {/* ------------------------ 자유 게시판 ------------------------- */}
                 <Box>
-                    <Typography variant="h6" sx={{ mb: 2, mt: 4, fontSize: '32px', fontWeight: 600 }}>
+                    <Typography variant="h6" sx={{ mb: 4, mt: 4, fontSize: '32px', fontWeight: 600 }}>
                         자유 게시판
                     </Typography>
                     <Stack direction="column" spacing={2} sx={{ pb: 2 }}>
@@ -119,7 +120,7 @@ function Main() {
                 flexShrink: 0, // 수축 지수 0으로 설정하여 화면이 좁아져도 무조건 width 너비 유지
             }}>
                 {/* 마이페이지 영역*/}
-                <Box sx={{ backgroundColor: '#F7F8FC', p: 3, borderRadius: 8 }}>
+                <Box sx={{ mt:4, backgroundColor: '#F7F8FC', p: 3, borderRadius: 8 }}>
                     <Stack spacing={2}>
                         <Card
                             component={NavLink}

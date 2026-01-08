@@ -60,7 +60,7 @@ function MbtiEvt() {
                   sx={{
                     py: 2,
                     borderRadius: 3,
-                    fontSize: 16,
+                    fontSize: '20px',
                     backgroundColor: '#C2E7FE',
                     color: '#000',
                     '&:hover': { backgroundColor: '#549BD3' },
@@ -76,7 +76,7 @@ function MbtiEvt() {
             <Typography fontWeight={700} sx={{ fontSize: 28, mb: 2 }}>
               당신의 MBTI는 {mbti}
             </Typography>
-            <Typography sx={{ fontSize: 18 }}>
+            <Typography sx={{ fontSize: '22px' }}>
               어울리는 반려동물은 <b>{mbtiMap[mbti]}</b> 입니다 🐾
             </Typography>
           </>

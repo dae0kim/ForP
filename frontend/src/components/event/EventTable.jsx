@@ -42,10 +42,10 @@ function EventTable(props) {
                             sx={{objectFit: 'contain'}}
                             />
                             <CardContent sx={{p: 2}}>
-                                <Typography fontWeight={600} sx={{pb: 1}}>
+                                <Typography fontWeight={600} sx={{ fontSize:'20px', pb: 1 }}>
                                     {event.title}
                                 </Typography>
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography variant="body2" color="text.secondary" sx={{ fontSize:'18px' }}>
                                     {event.subTitle}
                                 </Typography>
                             </CardContent> 
